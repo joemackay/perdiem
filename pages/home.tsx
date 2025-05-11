@@ -60,6 +60,10 @@ const HomeService =()=> {
     setDateOrdinal(ordinal);
   };
 
+  const onDateSelectionCancelled = () => {
+    setShowDatePicker(false)
+  }
+
   const onSelectTime = (time: string) => {
     setSelectedTime(time)
     setChosenTime(time)
@@ -113,30 +117,30 @@ const HomeService =()=> {
               <Text className="pt-3">
                 {chosenDate > 0 ? (
                   <>
-                    Chose {chosenDate}{dateOrdinal} at {chosenTime}
+                    You selected {chosenDate}{dateOrdinal} at {chosenTime}
                   </>
                 ): null }
                 
               </Text>
             </View>
             <View className="mt-4 bg-white">
-              {showDatePicker && 
-                (
-                  <CustomDatePicker
+              {showDatePicker ? (
+                <CustomDatePicker
                   daysArray={daysArray.map(dayObj => dayObj.number)}
                   currentDate={currentDate}
                   onDateSelected={onSelectDate}
-                  monthTitle={currentMonth.toString()}
+                  onCancelled={onDateSelectionCancelled}
+                  monthTitle={(currentMonth + 1).toString()}
                 />
                 )
-              }
+              : null}
+              {showTimeSlotPicker ? (
+                <TimeSlots
+                  slotArray={timeSlotIntervals}
+                  onTimeSlotSelected={onSelectTime}
+                />
+              ): null}
             </View>
-            {showTimeSlotPicker ? (
-              <TimeSlots
-                slotArray={timeSlotIntervals}
-                onTimeSlotSelected={onSelectTime}
-              />
-            ): null}
           </View>
         </View>
       </View>

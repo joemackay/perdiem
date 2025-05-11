@@ -1,36 +1,25 @@
-import { useAuthStore } from '@/store/auth-store';
-import { useSchedulesStore } from "@/store/schedules-store";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from "react";
+import { Text, TouchableOpacity, View } from 'react-native';
+import { Button } from "./button";
 
 interface datePickerType {
   daysArray: number[],
   currentDate: number,
   monthTitle: string,
   onDateSelected: (date: number) => void;
+  onCancelled: () => void;
 }
-const CustomDatePicker: React.FC<datePickerType> = ({ daysArray, currentDate, monthTitle, onDateSelected }) => {
-  const { timezone, setSelectedTimezone } = useSchedulesStore();
-  const [isEnabled, setIsEnabled] = useState(true);
-  const { user } = useAuthStore()
-
-  const toggleTimezone = () => {
-    setIsEnabled(!isEnabled)
-    console.log('1. isEnabled', isEnabled)
-    // setSelectedTimezone(isEnabled ? 'America/New_York' : locale);
-    console.log('2. locale', timezone)
-  };
-
-  useEffect(()=>{
-    console.log('3. stored timezone', timezone)
-    console.log('4. user', user)
-  }, [timezone])
+const CustomDatePicker: React.FC<datePickerType> = ({ daysArray, currentDate, monthTitle, onDateSelected, onCancelled }) => {
 
   return (
     <>
-      <View className='flex-1 bg-white'>
-        <Text className='mr-2 text-black'>{monthTitle}</Text>
-        <View className='flex-wrap flex-row bg-white'>
+      <View className=' bg-gray-100 py-2'>
+        <View className="flex-row justify-between px-2">
+          <Text className='text-center mt-2'>Select Date</Text>
+          <Button onPress={onCancelled} className="bg-slate-500 w-15 h-10 text-center items-center"> X</Button>
+        </View>
+        <Text className='mr-2 text-black font-bold ml-2'>Month {monthTitle}</Text>
+        <View className='flex-wrap flex-row mt-2 pb-2'>
           {daysArray.map((day, index) => (
             <View key={index} className="bg-slate-200 rounded-md p-2 m-2 border-1 border-slate-400 w-12 h-12 justify-center items-center">
               <TouchableOpacity
@@ -45,25 +34,5 @@ const CustomDatePicker: React.FC<datePickerType> = ({ daysArray, currentDate, mo
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
-
 
 export default CustomDatePicker;
