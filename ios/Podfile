@@ -17,11 +17,15 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 # require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 # Static linking required for Firebase + Google Sign-In
-  use_modular_headers!
-  use_frameworks! :linkage => :static
+use_modular_headers!
+use_frameworks! :linkage => :static
+$RNFirebaseAsStaticFramework = true
 
 target 'timescheduler' do
   use_expo_modules!
+
+  pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];

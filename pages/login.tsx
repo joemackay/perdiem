@@ -1,39 +1,41 @@
 import { loginWithEmail } from "@/api/auth";
+import { GOOGLE_CLIENT_ID } from "@/constants/ApiKeys";
 import { useAuth } from '@/core/auth';
 import { useAuthStore } from "@/store/auth-store";
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const LoginService =()=> {
   const saveToken = useAuth.use.saveToken();
   const [email, setEmail] = useState('user@tryperdiem.com');
   const [password, setPassword] = useState('password');
+  const [error, setError] = useState<string | null>(null);
   const { setUser } = useAuthStore()
   // const { promptAsync } = useGoogleAuth();
 
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     const result = await promptAsync();
-  //     if (result?.type === 'success') {
-  //       // Use the result to sign in with Firebase
-  //       // Firebase will automatically handle sign-in and save the user state
-  //       const user = result.params;
-  //       const payload = {
-  //         fname: user.fname,
-  //         lname: user.lname,
-  //         picture: user.picture,
-  //         email: user.email,
-  //         user_uuid: user.user_uuid || 'default-uuid', // Replace with actual logic
-  //         status: user.status || 'active', // Replace with actual logic
-  //         last_seen: user.last_seen || new Date().toISOString(), // Replace with actual logic
-  //       }
-  //       setUser(payload);
-  //     }
-  //   } catch (error) {
-  //     console.error('Google login failed:', error);
-  //   }
-  // };
+  useEffect(() => {
+    // Configure Google Sign-In on component mount
+    GoogleSignin.configure({
+      webClientId: GOOGLE_CLIENT_ID,
+    });
+
+    const unsubscribe = auth().onAuthStateChanged((authUser) => {
+      if (authUser) {
+        setUser({
+          user_uuid: authUser.uid,
+          fname: authUser.displayName?.split(' ')[0] || '',
+          lname: authUser.displayName?.split(' ')[1] || '',
+          picture: authUser.photoURL || '',
+          email: authUser.email || '',
+        });
+      }
+    });
+
+    return unsubscribe; // Unsubscribe from the listener when the component unmounts
+  }, [])
 
   const handleEmailLogin = async () => {
     console.log('handleEmailLogin')
@@ -48,6 +50,55 @@ const LoginService =()=> {
       // Alert.alert('Login Failed', error.message || 'Invalid credentials');
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    let idToken;
+    try {
+      // Check if your device supports Google Play
+      await GoogleSignin.hasPlayServices();
+
+      // Get the users ID token
+      const signInResult = await GoogleSignin.signIn();
+
+      // Try the new style of google-sign in result, from v13+ of that module
+
+      idToken = signInResult.data?.idToken;
+      if (idToken) {
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+        await auth().signInWithCredential(googleCredential);
+        setError(null);
+      } else {
+        setError('Could not retrieve Google ID token.');
+      }
+    } catch (e: any) {
+      if (e.code === statusCodes.SIGN_IN_CANCELLED) {
+        // User cancelled the sign-in flow
+        setError('Sign in cancelled.');
+      } else if (e.code === statusCodes.IN_PROGRESS) {
+        // Operation (e.g. sign in) is in progress already
+        setError('Sign in in progress...');
+      } else if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // Play services not available or outdated
+        setError('Google Play Services not available. Please update.');
+      } else {
+        // Some other error happened
+        setError(`Google Sign-in error: ${e.message}`);
+        console.error('Google Sign-in error:', e);
+      }
+    }
+  };
+
+  // const handleSignOut = async () => {
+  //   try {
+  //     await GoogleSignin.revokeAccess();
+  //     await auth().signOut();
+  //     setUser(null);
+  //     setError(null);
+  //   } catch (error: any) {
+  //     console.error('Sign-out error:', error);
+  //     setError('Error signing out.');
+  //   }
+  // };
   return (
     <>
       <View className='flex-1 justify-center p-4 bg-slate-300'>
@@ -80,12 +131,12 @@ const LoginService =()=> {
 
         <View className="justify-center items-center mt-5"><Link href={"/signup"} className="text-blue-700 font-bold">Sign up</Link></View>
         
-        {/* <TouchableOpacity
+        <TouchableOpacity
           className='bg-red-500 p-3 rounded'
-          onPress={signInWithGoogle}
+          onPress={handleGoogleSignIn}
         >
           <Text className='text-white text-center'>Login with Google</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </>
   )

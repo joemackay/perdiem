@@ -3861,6 +3861,8 @@ DEPENDENCIES:
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
+  - FirebaseAuth
+  - FirebaseFirestore
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
@@ -4326,9 +4328,9 @@ SPEC CHECKSUMS:
   ReactCommon: 1511ef100f1afa4c199fe52fe7a8d2529a41429a
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNDateTimePicker: 8c6faabd27163a374ee08ea8d64cbc0b104c5d9b
-  RNFBApp: cb46a0facdbd687c5379783d6dc35c5ae71e1c6d
-  RNFBAuth: a2219d06d829cfa03cba8465edb16f5068e3d7f6
-  RNFBFirestore: 3918061bc777c22b902df9e345fbb651daf4415d
+  RNFBApp: ce7a5efbd91af58a736234a90cb158a3f846be94
+  RNFBAuth: 3bb917b10252363d5e97c1113b20a31acf00f0a2
+  RNFBFirestore: 8416131bbaf4bd568c6427b4f29aaadda558f7f5
   RNGestureHandler: 8ff2b1434b0ff8bab28c8242a656fb842990bbc8
   RNGoogleSignin: dc7716f76daab63b643c73289efde7e3b11d9fba
   RNLocalize: 530e4a79bacbc6d7c13df44edb266e805903f656
@@ -4341,6 +4343,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 50518ade05048235d91a78b803336dbb5b159d5d
 
-PODFILE CHECKSUM: 423fadbdb0233b7fd386b854988a090d789d65c7
+PODFILE CHECKSUM: fbeb9d88a33567153436ab2c1ceec48ffa5d424c
 
 COCOAPODS: 1.16.2
