@@ -8,6 +8,8 @@ import CustomDatePicker from "@/ui/CustomDatePicker";
 import TimeSlots from "@/ui/TimeSlotsPicker";
 import TimezoneToggle from "@/ui/TimeZoneToggle";
 import { generate24HourIntervals, generateMonthlySequence, getDateOrdinal } from '@/utils/formatter';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Localization from 'expo-localization';
 import { router } from "expo-router";
 
@@ -71,9 +73,11 @@ const HomeService =()=> {
     setShowDatePicker(true);
   };
 
-  const handleLogout =() => {
+  const handleLogout =async () => {
     logout()
     router.replace('/login')
+    await GoogleSignin.revokeAccess();
+    await auth().signOut();
   }
 
   useEffect(() => {

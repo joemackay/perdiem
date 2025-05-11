@@ -1,7 +1,8 @@
 // stores/authStore.ts
 import { StoreScheduleType } from '@/types/storescheduletime';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 type ScheduleState = {
   timezone: string | null;
@@ -24,10 +25,19 @@ export const useSchedulesStore = create<ScheduleState>()(
 
       // number format day of the week
       selectedDayOfTheMonth: null,
+
+      // store selected time for use in other pages
       selectedTime: null,
+
+      // store the list of schedules 
       storeSchedules: [],
+
+      // store the list of schedule overides
       storeScheduleOverides: [],
-      setSelectedTimezone: (tz: string) => set({ timezone: tz }),
+      setSelectedTimezone: (tz: string) => {
+        console.log('setSelectedTimezone > tz', tz)
+        set({ timezone: tz })
+      },
       setSelectedDayOfTheMonth: (date: number) => {
         set({ selectedDayOfTheMonth: date })
       },
@@ -41,6 +51,8 @@ export const useSchedulesStore = create<ScheduleState>()(
         set({storeScheduleOverides : schedules})
       }
     }),
-    { name: 'schedules-storage' }
+    { name: 'schedules-storage',
+      storage: createJSONStorage(() => AsyncStorage), // Explicitly use AsyncStorage 
+      }
   )
 );

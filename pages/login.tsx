@@ -3,7 +3,7 @@ import { GOOGLE_CLIENT_ID } from "@/constants/ApiKeys";
 import { useAuth } from '@/core/auth';
 import { useAuthStore } from "@/store/auth-store";
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -13,6 +13,7 @@ const LoginService =()=> {
   const [email, setEmail] = useState('user@tryperdiem.com');
   const [password, setPassword] = useState('password');
   const [error, setError] = useState<string | null>(null);
+  const [isSigninInProgress, setIsSigninInProgress] = useState(false);
   const { setUser } = useAuthStore()
   // const { promptAsync } = useGoogleAuth();
 
@@ -48,12 +49,17 @@ const LoginService =()=> {
       }
     } catch (error) {
       // Alert.alert('Login Failed', error.message || 'Invalid credentials');
+    } finally {
+      setIsSigninInProgress(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     let idToken;
     try {
+      // Being signin process
+      setIsSigninInProgress(true);
+
       // Check if your device supports Google Play
       await GoogleSignin.hasPlayServices();
 
@@ -88,22 +94,19 @@ const LoginService =()=> {
     }
   };
 
-  // const handleSignOut = async () => {
-  //   try {
-  //     await GoogleSignin.revokeAccess();
-  //     await auth().signOut();
-  //     setUser(null);
-  //     setError(null);
-  //   } catch (error: any) {
-  //     console.error('Sign-out error:', error);
-  //     setError('Error signing out.');
-  //   }
-  // };
   return (
     <>
       <View className='flex-1 justify-center p-4 bg-slate-300'>
         <Text className='text-2xl font-bold text-center mb-8'>Welcome to PerDiem</Text>
         <Text className='text-2xl font-bold text-center mb-8'>Logins</Text>
+        
+        {error && (
+          <View className="absolute top-10 left-0 right-0 items-center z-50">
+            <Text className="text-white bg-red-500 px-4 py-2 rounded-md">
+              {error}
+            </Text>
+          </View>
+        )}
         
         <TextInput
           className='border p-3 rounded mb-4'
@@ -128,15 +131,22 @@ const LoginService =()=> {
         >
           <Text className='text-white text-center'>Login with Email</Text>
         </TouchableOpacity>
-
-        <View className="justify-center items-center mt-5"><Link href={"/signup"} className="text-blue-700 font-bold">Sign up</Link></View>
         
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className='bg-red-500 p-3 rounded'
           onPress={handleGoogleSignIn}
         >
           <Text className='text-white text-center'>Login with Google</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={handleGoogleSignIn}
+            disabled={isSigninInProgress}
+          />
+
+        <View className="justify-center items-center mt-10"><Link href={"/signup"} className="text-blue-700 font-bold">Sign up</Link></View>
       </View>
     </>
   )
