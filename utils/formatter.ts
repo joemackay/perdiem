@@ -1,0 +1,151 @@
+export const formatTime = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+export const formatDate = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = date.toLocaleString('default', { month: 'long' }); // e.g., "May"
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
+
+export const timeAgo = (past: number) => {
+  const now = Math.floor(Date.now() / 1000); // current time in seconds
+  const diffMs = now - past; // difference in milliseconds
+  const diffMinutes = Math.floor(diffMs / (60));
+  const diffHours = Math.floor(diffMs / (60 * 60));
+
+  if (diffMinutes < 1) return "Just now";
+  if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+
+  // Fallback to date if over 24 hours
+  // return timeAgo.toLocaleDateString(); // or use formatDate() from earlier
+}
+
+export const generateMonthlySequence = (startNumber: number) => {
+  const today = new Date();
+  const currentDayOfMonth = today.getDate();
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  
+  const sequence = [];
+  for (let i = 0; i < 30; i++) {
+    const day = (currentDayOfMonth + i - 1) % daysInMonth + 1;
+    const num = ((startNumber - 1 + i) % 30) + 1;
+    sequence.push({ day, number: num });
+  }
+  
+  return sequence;
+}
+
+export const generateDaytimeIntervals12Hr = (startHour: number, startMinute: number, period: string, durationHours = 12) => {
+  const intervals = [];
+  let currentHour = startHour;
+  let currentMinute = startMinute;
+  let currentPeriod = period;
+  
+  // Convert start time to 24-hour format for calculations
+  let hour24 = currentHour;
+  if (currentPeriod === 'PM' && hour24 !== 12) hour24 += 12;
+  if (currentPeriod === 'AM' && hour24 === 12) hour24 = 0;
+  
+  for (let i = 0; i < durationHours * 4; i++) { // 4 intervals per hour
+    // Format start time
+    const startHour12 = currentHour === 0 ? 12 : currentHour > 12 ? currentHour - 12 : currentHour;
+    const startTime = `${startHour12.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')} ${currentPeriod}`;
+    
+    // Calculate end time
+    let endMinute = currentMinute + 15;
+    let endHour = currentHour;
+    let endPeriod = currentPeriod;
+    
+    if (endMinute >= 60) {
+      endMinute = endMinute % 60;
+      endHour++;
+      
+      // Handle period changes
+      if (endHour === 12) {
+        endPeriod = currentPeriod === 'AM' ? 'PM' : 'AM';
+      }
+      if (endHour > 12) {
+        endHour = endHour % 12;
+      }
+    }
+    
+    // Format end time
+    const endHour12 = endHour === 0 ? 12 : endHour > 12 ? endHour - 12 : endHour;
+    const endTime = `${endHour12.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')} ${endPeriod}`;
+    
+    intervals.push(`${startTime} - ${endTime}`);
+    
+    // Update current time for next iteration
+    currentHour = endHour;
+    currentMinute = endMinute;
+    currentPeriod = endPeriod;
+  }
+  
+  return intervals;
+}
+
+export const generate24HourIntervals = (startHour: number, startMinute: number, durationHours = 12) => {
+  const intervals = [];
+  let currentHour = startHour;
+  let currentMinute = startMinute;
+  
+  for (let i = 0; i < durationHours * 4; i++) {
+    // Format start time (HH:MM)
+    const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+    
+    // Calculate end time
+    let endHour = currentHour;
+    let endMinute = currentMinute + 15;
+    
+    if (endMinute >= 60) {
+      endMinute = endMinute % 60;
+      endHour = (endHour + 1) % 24;
+    }
+    
+    // Format end time (HH:MM)
+    const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+    
+    intervals.push(`${startTime} - ${endTime}`);
+    
+    // Update current time for next iteration
+    currentHour = endHour;
+    currentMinute = endMinute;
+  }
+  
+  return intervals;
+}
+
+export const timeToMinutes = (time: string) => {
+  if (time !== "") {
+    const [hours, minutes] = (time || '00:00').split(':').map(Number);
+    // const timeParts = typeof time === 'string' ? time.split(':') : ['0', '0'];
+    // const [hours, minutes] = timeParts.map(Number);
+    return hours * 60 + minutes || 0;
+  }
+  return 0;
+};
+
+export const getDateOrdinal = (dateNumber: number) => {
+  let ordinal;
+  switch(dateNumber) {
+    case 1:
+      ordinal = 'st'
+      break;
+    case 2:
+      ordinal = 'nd'
+      break;
+    case 3:
+      ordinal = 'rd'
+      break;
+    default:
+      ordinal = 'th'
+  }
+  return ordinal
+}
