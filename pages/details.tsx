@@ -41,17 +41,17 @@ const DetailsService =() => {
     setStoreAvailability(isAvailable)
   }, []);
   return (
-    <View className="m-2 bg-white p-2">
-      <Text className="text-xl text-bold">Store availability</Text>
-      <Text>The store is {storeAvailability ? 'Open' : 'Closed'} on {selectedDayOfTheMonth}{dateOrdinal} from {selectedTime}</Text>
-      <View className="my-2">
-        <View className={`rounded-md w-10 h-10 ${storeAvailability ? 'bg-green-600' : 'bg-red-600'} `}></View>
-      </View>
-      {/* <Link  asChild> */}
+    <View className="flex-1 m-2 bg-gray-100 p-2">
+      <View className="m-2 p-2 bg-white shadow-sm">
+        <Text className="text-xl text-bold">Store availability</Text>
+        <Text>The store is {storeAvailability ? 'Open' : 'Closed'} on {selectedDayOfTheMonth}{dateOrdinal} from {selectedTime}</Text>
+        <View className="my-2">
+          <View className={`rounded-md w-10 h-10 ${storeAvailability ? 'bg-green-600' : 'bg-red-600'} `}></View>
+        </View>
         <Button className="rounded-md w-32" onPress={() => router.back()}>
           Go Back
         </Button>
-      {/* </Link> */}
+      </View>
     </View>
   )
 }

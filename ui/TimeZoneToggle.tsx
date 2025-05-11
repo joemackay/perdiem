@@ -1,9 +1,7 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from "@/components/ThemedView";
 import { useAuthStore } from '@/store/auth-store';
 import { useSchedulesStore } from "@/store/schedules-store";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Switch } from 'react-native';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 
 interface timezoneType {
   locale: string
@@ -27,14 +25,14 @@ const TimezoneToggle: React.FC<timezoneType> = ({ locale }) => {
 
   return (
     <>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText className='mr-2 text-black'>{locale}</ThemedText>
+      <View className='bg-white flex-row justify-left items-center'>
+        <Text className='mr-2 text-black'>{locale}</Text>
         <Switch
           value={timezone === 'America/New_York'}
           onValueChange={toggleTimezone}
         />
-        <ThemedText className='ml-2'>NYC Timezone</ThemedText>
-      </ThemedView>
+        <Text className='ml-2'>NYC Timezone</Text>
+      </View>
     </>
   );
 };

@@ -25,6 +25,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="timescheduler"/>
+        <data android:scheme="exp+time-scheduler"/>
       </intent-filter>
     </activity>
   </application>

@@ -86,9 +86,9 @@ const HomeService =()=> {
   return (
     <>
       {/* <SafeAreaView> */}
-      <View className="flex-1">
+      <View className="flex-1 bg-gray-100">
         <View className="p-2 h-full">
-          <View className="flex-row justify-between mt-2 mb-4 bg-white shadow p-2">
+          <View className="flex-row justify-between mt-2 mb-4 bg-white shadow-sm p-2">
             <View>
               <Text className="text-2xl text-bold text-black">{userInfo?.fname}</Text>
               <Text className="text-md">{currentGreeting}</Text>
@@ -98,12 +98,12 @@ const HomeService =()=> {
             </View>
             {/* <View className="ml-2"><Text>{userInfo?.picture}</Text></View>  */}
           </View>
-          <View className="flex-col mb-4 bg-white shadow p-2">
+          <View className="flex-col mb-4 bg-white  shadow-sm p-2">
             <Text className="text-md mb-6">What is your preferred timezone?</Text>
             <TimezoneToggle locale={myTimeZone} />
           </View>
           
-          <View className="flex-col mb-4 bg-white shadow p-2">
+          <View className="flex-col mb-4 bg-white  shadow-sm p-2">
             <View className="flex-row justify-between">
               {!showDatePicker && !showTimeSlotPicker && <Button onPress={showDatepicker} className="bg-blue-300">Select Date</Button>}
               <Text className="pt-3">
