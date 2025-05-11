@@ -9,16 +9,18 @@ const DetailsService =() => {
   const [storeAvailability, setStoreAvailability] = useState(false)
   const { storeSchedules, storeScheduleOverides, selectedDayOfTheMonth, selectedTime, setSchedules, setScheduleOverides } = useSchedulesStore()
   const [dateOrdinal, setDateOrdinal] = useState('')
-  const fetchSchedules = async () => {
+  
+  useEffect(() => {
+
+    const ordinal = getDateOrdinal(selectedDayOfTheMonth ?? 1)
+    setDateOrdinal(ordinal);
+
+    const fetchSchedules = async () => {
     const schedules = await fetchStoreTimes();
     setSchedules(schedules);
     const scheduleOverrides = await fetchStoreOverrides();
     setScheduleOverides(scheduleOverrides);
   };
-
-  useEffect(() => {
-    const ordinal = getDateOrdinal(selectedDayOfTheMonth ?? 1)
-    setDateOrdinal(ordinal);
     fetchSchedules();
 
     //convert the selected time to minutes for easy comparison

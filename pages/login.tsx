@@ -1,10 +1,12 @@
 import { loginWithEmail } from "@/api/auth";
+import { useAuth } from '@/core/auth';
 import { useAuthStore } from "@/store/auth-store";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const LoginService =()=> {
+  const saveToken = useAuth.use.saveToken();
   const [email, setEmail] = useState('user@tryperdiem.com');
   const [password, setPassword] = useState('password');
   const { setUser } = useAuthStore()
@@ -39,6 +41,7 @@ const LoginService =()=> {
       const response = await loginWithEmail(email, password);
       if (response) {
         setUser(response)
+        saveToken({ access: response.token, refresh: response.token });
         router.navigate('/home');
       }
     } catch (error) {
