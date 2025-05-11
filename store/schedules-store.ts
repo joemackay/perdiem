@@ -35,7 +35,6 @@ export const useSchedulesStore = create<ScheduleState>()(
       // store the list of schedule overides
       storeScheduleOverides: [],
       setSelectedTimezone: (tz: string) => {
-        console.log('setSelectedTimezone > tz', tz)
         set({ timezone: tz })
       },
       setSelectedDayOfTheMonth: (date: number) => {

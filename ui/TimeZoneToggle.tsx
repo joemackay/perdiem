@@ -1,7 +1,6 @@
-import { useAuthStore } from '@/store/auth-store';
 import { useSchedulesStore } from "@/store/schedules-store";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { Switch, Text, View } from 'react-native';
 
 interface timezoneType {
   locale: string
@@ -9,19 +8,11 @@ interface timezoneType {
 const TimezoneToggle: React.FC<timezoneType> = ({ locale }) => {
   const { timezone, setSelectedTimezone } = useSchedulesStore();
   const [isEnabled, setIsEnabled] = useState(true);
-  const { user } = useAuthStore()
 
   const toggleTimezone = () => {
     setIsEnabled(!isEnabled)
-    console.log('1. isEnabled', isEnabled)
     setSelectedTimezone(isEnabled ? 'America/New_York' : locale);
-    console.log('2. locale', timezone)
   };
-
-  useEffect(()=>{
-    console.log('3. stored timezone', timezone)
-    console.log('4. user', user)
-  }, [timezone])
 
   return (
     <>
@@ -36,25 +27,5 @@ const TimezoneToggle: React.FC<timezoneType> = ({ locale }) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
-
 
 export default TimezoneToggle;

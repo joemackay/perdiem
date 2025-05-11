@@ -8,6 +8,7 @@ import CustomDatePicker from "@/ui/CustomDatePicker";
 import TimeSlots from "@/ui/TimeSlotsPicker";
 import TimezoneToggle from "@/ui/TimeZoneToggle";
 import { generate24HourIntervals, generateMonthlySequence, getDateOrdinal } from '@/utils/formatter';
+// import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Localization from 'expo-localization';
@@ -68,12 +69,10 @@ const HomeService =()=> {
     setSelectedTime(time)
     setChosenTime(time)
     setShowTimeSlotPicker(false)
-    console.log('time', time)
     router.push('/details')
   }
 
   const showDatepicker = () => {
-    console.log('showDatepicker')
     setShowDatePicker(true);
   };
 
@@ -88,8 +87,24 @@ const HomeService =()=> {
       const timezone = Localization.timezone;
       setMyTimeZone(timezone);
       setCurrentGreeting(greeting);
-      console.log('selectedTime', selectedTime)
       // setUserInfo(user)
+
+      // const addNotificationRequest = () => {
+      //   PushNotificationIOS.addNotificationRequest({
+      //     id: 'test',
+      //     title: 'title',
+      //     subtitle: 'subtitle',
+      //     body: 'body',
+      //     category: 'test',
+      //     threadId: 'thread-id',
+      //     fireDate: new Date(new Date().valueOf() + 5000),
+      //     repeats: true,
+      //     userInfo: {
+      //       image: 'https://www.github.com/Naturalclar.png',
+      //     },
+      //   });
+      // }
+      // addNotificationRequest()
     }, [timezone, greeting, selectedTime]);
   return (
     <>
