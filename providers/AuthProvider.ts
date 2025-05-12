@@ -1,5 +1,4 @@
 // src/auth/googleAuth.ts
-import { GOOGLE_CLIENT_ID } from '@/constants/ApiKeys';
 import { useAuthStore } from '@/store/auth-store';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -7,7 +6,7 @@ import { useEffect } from 'react';
 
 // TODO: Apply in the layout or index file
 GoogleSignin.configure({
-  webClientId: GOOGLE_CLIENT_ID,
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
 });
 
 const AuthProvider = ({ children }: { children: any }) => {

@@ -1,10 +1,10 @@
-import { fetchStoreOverrides, fetchStoreTimes } from "@/api/schedules";
-import { useSchedulesStore } from "@/store/schedules-store";
-import { Button } from "@/ui/button";
-import { getDateOrdinal, timeToMinutes } from "@/utils/formatter";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { fetchStoreOverrides, fetchStoreTimes } from "../api/schedules";
+import { useSchedulesStore } from "../store/schedules-store";
+import { Button } from "../ui/button";
+import { getDateOrdinal, timeToMinutes } from "../utils/formatter";
 
 // The business logic of details page
 const DetailsService =() => {

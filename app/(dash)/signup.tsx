@@ -1,5 +1,5 @@
-import SignUpService from "@/pages/signupservice";
 import React from "react";
+import SignUpService from "../../pages/signupservice";
 const SignUpScreen =()=> {
 
   return (

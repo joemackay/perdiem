@@ -1,5 +1,5 @@
-import LoginService from "@/pages/loginservice";
 import React from "react";
+import LoginService from "../../pages/loginservice";
 
 const LoginScreen =()=> {
 

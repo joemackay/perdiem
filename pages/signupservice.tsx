@@ -1,12 +1,11 @@
-import { signupWithEmail } from "@/api/auth";
-import { GOOGLE_CLIENT_ID } from "@/constants/ApiKeys";
-import { useAuth } from '@/core/auth';
-import { useAuthStore } from "@/store/auth-store";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { signupWithEmail } from "../api/auth";
+import { useAuth } from '../core/auth';
+import { useAuthStore } from "../store/auth-store";
 
 
 // The business logic of the sign up page
@@ -24,7 +23,7 @@ const SignUpService =()=> {
   useEffect(() => {
     // Configure Google Sign-In on component mount
     GoogleSignin.configure({
-      webClientId: GOOGLE_CLIENT_ID,
+      webClientId:process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
     });
 
     const unsubscribe = auth().onAuthStateChanged((authUser) => {
@@ -116,6 +115,7 @@ const SignUpService =()=> {
           onChangeText={setNames}
           autoCapitalize="none"
           keyboardType="default"
+          testID="test-signup-names"
         />
         
         <TextInput
@@ -125,6 +125,7 @@ const SignUpService =()=> {
           onChangeText={setPhone}
           autoCapitalize="none"
           keyboardType="default"
+          testID="test-signup-phone"
         />
         
         <TextInput
@@ -134,6 +135,7 @@ const SignUpService =()=> {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
+          testID="test-signup-email"
         />
         
         <TextInput
@@ -142,11 +144,13 @@ const SignUpService =()=> {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          testID="test-signup-password"
         />
         
         <TouchableOpacity
           className='bg-slate-600 rounded-xl py-4 mb-4'
           onPress={()=>handleEmailSignup()}
+          testID="test-signup-touch-opacity"
         >
           <Text className='text-white text-center'>{isSignUpProgress ? 'Wait...' : 'Sign up with Email'}</Text>
         </TouchableOpacity>
@@ -156,8 +160,15 @@ const SignUpService =()=> {
             color={GoogleSigninButton.Color.Dark}
             onPress={handleGoogleSignUp}
             disabled={isSignUpProgress}
+          testID="test-google-signup-button"
           />
-        <View className="justify-center items-center mt-5"><Link href={"/login"} className="text-blue-700 font-bold">Login</Link></View>
+        <View className="justify-center items-center mt-5">
+          <Link
+            href={"/login"} 
+            className="text-blue-700 font-bold"
+            testID="test-link-to-login"
+          >Login</Link>
+        </View>
       
       </View>
     </>

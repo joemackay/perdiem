@@ -1,13 +1,13 @@
-import { useAuthStore } from "@/store/auth-store";
-import { useSchedulesStore } from "@/store/schedules-store";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { useAuthStore } from "../store/auth-store";
+import { useSchedulesStore } from "../store/schedules-store";
 // import Timezone from 'react-native-timezone';
-import { Button } from "@/ui/button";
-import CustomDatePicker from "@/ui/CustomDatePicker";
-import TimeSlots from "@/ui/TimeSlotsPicker";
-import TimezoneToggle from "@/ui/TimeZoneToggle";
-import { generate24HourIntervals, generateMonthlySequence, getDateOrdinal } from '@/utils/formatter';
+import { Button } from "../ui/button";
+import CustomDatePicker from "../ui/CustomDatePicker";
+import TimeSlots from "../ui/TimeSlotsPicker";
+import TimezoneToggle from "../ui/TimeZoneToggle";
+import { generate24HourIntervals, generateMonthlySequence, getDateOrdinal } from '../utils/formatter';
 // import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -226,7 +226,9 @@ const HomeService =()=> {
               <Text className="text-md">{currentGreeting}</Text>
             </View>
             <View>
-              <Button onPress={()=>handleLogout()}>Logout</Button>
+              <Button
+                onPress={()=>handleLogout()}
+                testID="test-logout-button">Logout</Button>
             </View>
             {/* <View className="ml-2"><Text>{userInfo?.picture}</Text></View>  */}
           </View>
@@ -237,7 +239,10 @@ const HomeService =()=> {
           
           <View className="flex-col mb-4 bg-white  shadow-sm p-2">
             <View className="flex-row justify-between">
-              {!showDatePicker && !showTimeSlotPicker && <Button onPress={showDatepicker} className="bg-blue-300">Select Date</Button>}
+              {!showDatePicker && !showTimeSlotPicker && 
+                <Button onPress={showDatepicker}
+                  className="bg-blue-300"
+                  testID="test-select-date-button">Select Date</Button>}
               <Text className="pt-3">
                 {chosenDate > 0 ? (
                   <>
@@ -255,6 +260,7 @@ const HomeService =()=> {
                   onDateSelected={onSelectDate}
                   onCancelled={onDateSelectionCancelled}
                   monthTitle={(currentMonth + 1).toString()}
+                  testID="test-custom-date-picker"
                 />
                 )
               : null}
@@ -262,6 +268,7 @@ const HomeService =()=> {
                 <TimeSlots
                   slotArray={timeSlotIntervals}
                   onTimeSlotSelected={onSelectTime}
+                  testID="test-time-slots"
                 />
               ): null}
             </View>

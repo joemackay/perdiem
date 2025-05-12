@@ -1,18 +1,23 @@
 import axios, { isAxiosError } from 'axios';
 
-const BASE_URL = 'https://coding-challenge-pd-1a25b1a14f34.herokuapp.com';
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+
+export const client = axios.create({
+  baseURL: BASE_URL,
+});
 
 export const loginWithEmail = async (email: string, password:string) => {
-  console.log('loginWithEmail')
+  // console.log('loginWithEmail BASE_URL', `${BASE_URL}/auth/`)
+  // console.log('All env vars:', process.env);
   try {
-    const response = await client.post(`${BASE_URL}/auth/`, {
+    const response = await axios.post(`${BASE_URL}/auth/`, {
       email,
       password,
     });
     const payload = {
       ...response.data,
       fname: "Joe",
-      lname: "Smitch",
+      lname: "Smith",
       picture: "ajkhdgfka",
       email
     }
@@ -28,7 +33,7 @@ export const loginWithEmail = async (email: string, password:string) => {
 export const signupWithEmail = async (names: string, phone: string, email: string, password:string) => {
   console.log('loginWithEmail')
   try {
-    const response = await client.post(`${BASE_URL}/auth/`, {
+    const response = await axios.post(`${BASE_URL}/auth/`, {
       names,
       phone,
       email,
@@ -49,10 +54,6 @@ export const signupWithEmail = async (names: string, phone: string, email: strin
     throw error;
   }
 };
-
-export const client = axios.create({
-  baseURL: BASE_URL,
-});
 
 // client.interceptors.request.use(async (config) => {
 //   const token = await getValidToken();

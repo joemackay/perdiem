@@ -1,12 +1,11 @@
-import { loginWithEmail } from "@/api/auth";
-import { GOOGLE_CLIENT_ID } from "@/constants/ApiKeys";
-import { useAuth } from '@/core/auth';
-import { useAuthStore } from "@/store/auth-store";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { loginWithEmail } from "../api/auth";
+import { useAuth } from '../core/auth';
+import { useAuthStore } from "../store/auth-store";
 
 // The business logic of the login page
 const LoginService =()=> {
@@ -21,7 +20,7 @@ const LoginService =()=> {
   useEffect(() => {
     // Configure Google Sign-In on component mount
     GoogleSignin.configure({
-      webClientId: GOOGLE_CLIENT_ID,
+      webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
     });
 
     const unsubscribe = auth().onAuthStateChanged((authUser) => {
@@ -44,13 +43,18 @@ const LoginService =()=> {
     setIsSigninInProgress(true);
     try {
       const response = await loginWithEmail(email, password);
+      console.log('response', response)
       if (response) {
         setUser(response)
         saveToken({ access: response.token, refresh: response.token });
         router.navigate('/home');
       }
-    } catch (error: any) {
-      console.log('Login Failed', error.message || 'Invalid credentials');
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log('Login Failed', error.message || 'Invalid credentials');
+      } else {
+        console.log('Login Failed', 'Invalid credentials');
+      }
     } finally {
       setIsSigninInProgress(false);
     }
@@ -117,6 +121,7 @@ const LoginService =()=> {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
+          testID="test-email"
         />
         
         <TextInput
@@ -125,11 +130,13 @@ const LoginService =()=> {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          testID="test-password"
         />
         
         <TouchableOpacity
           className='bg-slate-600 rounded-xl py-4 mb-4'
           onPress={()=>handleEmailLogin()}
+          testID="test-login-touch-opacity"
         >
           <Text className='text-white text-center'>{isSigninInProgress ? 'Logging in...' : 'Login with Email'}</Text>
         </TouchableOpacity>
@@ -139,9 +146,16 @@ const LoginService =()=> {
             color={GoogleSigninButton.Color.Dark}
             onPress={handleGoogleSignIn}
             disabled={isSigninInProgress}
+          testID="test-google-login-button"
           />
 
-        <View className="justify-center items-center mt-10"><Link href={"/signup"} className="text-blue-700 font-bold">Sign up</Link></View>
+        <View className="justify-center items-center mt-10">
+          <Link 
+            href={"/signup"} 
+            className="text-blue-700 font-bold"
+            testID="test-link-to-signup"
+          >Sign up</Link>
+        </View>
       </View>
     </>
   )

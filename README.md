@@ -9,8 +9,14 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npm install
    ```
-   Some dependencies may refuse to install. Add the --force flag:
-   
+   Some dependencies may refuse to install. Use npx expo install package-name to select a version that works with your current Expo SDK version:
+
+   ```bash
+   npx expo install @react-navigation/material-top-tabs
+   ```
+
+   In case that fails. Add the --force flag to npm:
+
    ```bash
    npm install --force
    ```
@@ -21,31 +27,51 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   Or
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npx expo start -c  # -c clears the cache
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   In the output, you'll find options to open the app in a
+
+   - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+   - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+   - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+   - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+   Enter i to select iOS simulator
+
+   This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Run on iOS device
 
-1. When you're ready, plugin your iPhone via USB to your laptop, and run:
+1. First, generate native iOS directories using Prebuild
 
-```bash
-npx expo run:ios --device
-```
+   ```bash
+   npx expo prebuild
+   ```
 
-This command will setup CocoaPos, create a build and a connection with your IOS device.
+2. When you're ready, plugin your iPhone via USB to your laptop, and run:
 
-2. In case you run into iOS dependency issues run this command to reinstall the pos afresh
+   ```bash
+   npx expo run:ios --device
+   ```
 
-```bash
-pod install --repo-update
-```
+   This command will compile the native iOS app locally, setup CocoaPos, create a build and a connection with your IOS device.
 
+3. In case you run into iOS dependency issues run this command to reinstall the pos afresh
+
+   ```bash
+   pod install --repo-update
+   ```
+
+4. Diagnose issues with the app
+
+   ```bash
+   npx expo-doctor
+   ```
+   
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:

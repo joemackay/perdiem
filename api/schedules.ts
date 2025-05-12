@@ -1,15 +1,15 @@
-import { API_AUTH } from "@/constants/ApiKeys";
-import { StoreScheduleType } from "@/types/storescheduletime";
-import { client } from "./auth";
-// src/api/storeApi.ts
 
+import { StoreScheduleType } from "@/types/storescheduletime";
+import axios from "axios";
+// const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+const BASE_URL = 'https://coding-challenge-pd-1a25b1a14f34.herokuapp.com';
+// src/api/storeApi.ts
+const api_username = process.env.EXPO_PUBLIC_API_AUTH_USERNAME
+const api_pass = process.env.EXPO_PUBLIC_API_AUTH_PASS
 export const fetchStoreTimes = async (): Promise<StoreScheduleType[]> => {
+  console.log('fetchStoreTimes BASE_URL', `${BASE_URL}/store-times/`)
   try {
-    const response = await client.get(`/store-times/`, { 
-      headers: { 
-        Authorization: `Basic ${btoa(`${API_AUTH.username}:${API_AUTH.password}`)}` 
-      } 
-    });
+    const response = await axios.get(`${BASE_URL}/store-times/`);
     console.log('response', response.data)
     return response.data;
   } catch (error) {
@@ -24,10 +24,11 @@ export const fetchStoreTimes = async (): Promise<StoreScheduleType[]> => {
 }
 
 export const fetchStoreOverrides = async (): Promise<StoreScheduleType[]> => {
+  console.log('fetchStoreOverrides BASE_URL', `${BASE_URL}/store-times/`)
   try {
-    const response = await client.get(`/store-overrides/`, { 
+    const response = await axios.get(BASE_URL + `/store-overrides/`, { 
       headers: { 
-        Authorization: `Basic ${btoa(`${API_AUTH.username}:${API_AUTH.password}`)}` 
+        Authorization: `Basic ${btoa(`${api_username}:${api_pass}`)}` 
       } 
     });
     return response.data;
