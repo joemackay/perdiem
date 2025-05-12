@@ -9,7 +9,8 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npm install
    ```
-Some dependencies may refuse to install. Add the --force flag:
+   Some dependencies may refuse to install. Add the --force flag:
+   
    ```bash
    npm install --force
    ```
