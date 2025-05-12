@@ -1,4 +1,4 @@
-import { loginWithEmail } from "@/api/auth";
+import { signupWithEmail } from "@/api/auth";
 import { GOOGLE_CLIENT_ID } from "@/constants/ApiKeys";
 import { useAuth } from '@/core/auth';
 import { useAuthStore } from "@/store/auth-store";
@@ -8,16 +8,19 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
-// The business logic of the login page
-const LoginService =()=> {
+
+// The business logic of the sign up page
+const SignUpService =()=> {
   const saveToken = useAuth.use.saveToken();
-  const [email, setEmail] = useState('user@tryperdiem.com');
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [names, setNames] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isSigninInProgress, setIsSigninInProgress] = useState(false);
+  const [isSignUpProgress, setIsSignUpInProgress] = useState(false);
   const { setUser } = useAuthStore()
   // const { promptAsync } = useGoogleAuth();
-
+  
   useEffect(() => {
     // Configure Google Sign-In on component mount
     GoogleSignin.configure({
@@ -39,27 +42,25 @@ const LoginService =()=> {
     return unsubscribe; // Unsubscribe from the listener when the component unmounts
   }, [])
 
-  const handleEmailLogin = async () => {
-    console.log('handleEmailLogin')
+  const handleEmailSignup = async () => {
+    console.log('handleEmailSignup')
+    setIsSignUpInProgress(true);
     try {
-      const response = await loginWithEmail(email, password);
+      const response = await signupWithEmail(names, phone, email, password);
       if (response) {
         setUser(response)
-        saveToken({ access: response.token, refresh: response.token });
         router.navigate('/home');
       }
-    } catch (error: any) {
-      console.log('Login Failed', error.message || 'Invalid credentials');
-    } finally {
-      setIsSigninInProgress(false);
+    } catch (error) {
+      // Alert.alert('Login Failed', error.message || 'Invalid credentials');
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignUp = async () => {
     let idToken;
     try {
       // Being signin process
-      setIsSigninInProgress(true);
+      setIsSignUpInProgress(true);
 
       // Check if your device supports Google Play
       await GoogleSignin.hasPlayServices();
@@ -94,12 +95,11 @@ const LoginService =()=> {
       }
     }
   };
-
   return (
     <>
       <View className='flex-1 justify-center p-4 bg-slate-300'>
         <Text className='text-2xl font-bold text-center mb-8'>Welcome to PerDiem</Text>
-        <Text className='text-2xl font-bold text-center mb-8'>Logins</Text>
+        <Text className='text-2xl font-bold text-center mb-8'>Register</Text>
         
         {error && (
           <View className="absolute top-10 left-0 right-0 items-center z-50">
@@ -108,6 +108,24 @@ const LoginService =()=> {
             </Text>
           </View>
         )}
+        
+        <TextInput
+          className='border p-3 rounded mb-4'
+          placeholder="Full name"
+          value={names}
+          onChangeText={setNames}
+          autoCapitalize="none"
+          keyboardType="default"
+        />
+        
+        <TextInput
+          className='border p-3 rounded mb-4'
+          placeholder="Phone"
+          value={phone}
+          onChangeText={setPhone}
+          autoCapitalize="none"
+          keyboardType="default"
+        />
         
         <TextInput
           className='border p-3 rounded mb-4'
@@ -128,28 +146,21 @@ const LoginService =()=> {
         
         <TouchableOpacity
           className='bg-slate-600 rounded-xl py-4 mb-4'
-          onPress={()=>handleEmailLogin()}
+          onPress={()=>handleEmailSignup()}
         >
-          <Text className='text-white text-center'>Login with Email</Text>
+          <Text className='text-white text-center'>{isSignUpProgress ? 'Wait...' : 'Sign up with Email'}</Text>
         </TouchableOpacity>
         
-        {/* <TouchableOpacity
-          className='bg-red-500 p-3 rounded'
-          onPress={handleGoogleSignIn}
-        >
-          <Text className='text-white text-center'>Login with Google</Text>
-        </TouchableOpacity> */}
-
         <GoogleSigninButton
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
-            onPress={handleGoogleSignIn}
-            disabled={isSigninInProgress}
+            onPress={handleGoogleSignUp}
+            disabled={isSignUpProgress}
           />
-
-        <View className="justify-center items-center mt-10"><Link href={"/signup"} className="text-blue-700 font-bold">Sign up</Link></View>
+        <View className="justify-center items-center mt-5"><Link href={"/login"} className="text-blue-700 font-bold">Login</Link></View>
+      
       </View>
     </>
   )
 }
-export default LoginService;
+export default SignUpService;

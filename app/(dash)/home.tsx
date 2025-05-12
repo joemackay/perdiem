@@ -1,4 +1,4 @@
-import HomeService from "@/pages/home";
+import HomeService from "@/pages/homeservice";
 import React from "react";
 
 // App components/page to display home
