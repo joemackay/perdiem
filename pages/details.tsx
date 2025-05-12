@@ -5,6 +5,8 @@ import { getDateOrdinal, timeToMinutes } from "@/utils/formatter";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+
+// The business logic of details page
 const DetailsService =() => {
   const [storeAvailability, setStoreAvailability] = useState(false)
   const { storeSchedules, storeScheduleOverides, selectedDayOfTheMonth, selectedTime, setSchedules, setScheduleOverides } = useSchedulesStore()

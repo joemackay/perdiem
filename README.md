@@ -9,8 +9,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npm install
    ```
+Some dependencies may refuse to install. Add the --force flag:
+   ```bash
+   npm install --force
+   ```
 
-2. Start the app
+2. Start the app(using development build) and choose the platform to view it: Options are Android, iOS simulator and web.
 
    ```bash
    npx expo start
@@ -25,15 +29,21 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## Run on iOS device
 
-When you're ready, run:
+1. When you're ready, plugin your iPhone via USB to your laptop, and run:
 
 ```bash
-npm run reset-project
+npx expo run:ios --device
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This command will setup CocoaPos, create a build and a connection with your IOS device.
+
+2. In case you run into iOS dependency issues run this command to reinstall the pos afresh
+
+```bash
+pod install --repo-update
+```
 
 ## Learn more
 

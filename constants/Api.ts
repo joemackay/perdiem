@@ -1,1 +1,2 @@
+// The base url used allover the app
 export const BASE_URL = "https://coding-challenge-pd-1a25b1a14f34.herokuapp.com/";

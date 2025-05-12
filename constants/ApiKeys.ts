@@ -1,3 +1,4 @@
+// Api keys used by Firebase SDK
 export const FIREBASE_API_KEY ="AIzaSyBCiq3jgytKIcTkaW3u_iLpIEDY_BI2bXE"
 export const FIREBASE_AUTH_DOMAIN =""
 export const FIREBASE_PROJECT_ID ="perdiem-71067"

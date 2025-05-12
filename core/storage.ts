@@ -1,5 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 
+// Use MMKV for key pair easy storage
 export const storage = new MMKV();
 
 export function getItem<T>(key: string): T | null {

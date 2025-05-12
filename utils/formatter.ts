@@ -1,3 +1,4 @@
+// Given a timestamp generate formatted time in string format
 export const formatTime = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
   const hours = String(date.getHours()).padStart(2, '0');
@@ -5,6 +6,8 @@ export const formatTime = (timestamp: number) => {
   return `${hours}:${minutes}`;
 }
 
+
+// Given a timestamp return a string formatted date
 export const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
   const day = String(date.getDate()).padStart(2, '0');
@@ -13,6 +16,7 @@ export const formatDate = (timestamp: number) => {
   return `${day} ${month} ${year}`;
 }
 
+// How many minutes or hours ago
 export const timeAgo = (past: number) => {
   const now = Math.floor(Date.now() / 1000); // current time in seconds
   const diffMs = now - past; // difference in milliseconds
@@ -27,6 +31,8 @@ export const timeAgo = (past: number) => {
   // return timeAgo.toLocaleDateString(); // or use formatDate() from earlier
 }
 
+// Given a starting date, generate a sequence of days ahead.
+// Todo: Make it accurately calculte days per month
 export const generateMonthlySequence = (startNumber: number) => {
   const today = new Date();
   const currentDayOfMonth = today.getDate();
@@ -91,6 +97,7 @@ export const generateDaytimeIntervals12Hr = (startHour: number, startMinute: num
   return intervals;
 }
 
+// Generate the time intervals to be displayed
 export const generate24HourIntervals = (startHour: number, startMinute: number, durationHours = 12) => {
   const intervals = [];
   let currentHour = startHour;
@@ -122,6 +129,7 @@ export const generate24HourIntervals = (startHour: number, startMinute: number, 
   return intervals;
 }
 
+// format the time from string 10:46 to integer value 646 to be used for comparison
 export const timeToMinutes = (time: string) => {
   if (time !== "") {
     const [hours, minutes] = (time || '00:00').split(':').map(Number);
@@ -132,6 +140,7 @@ export const timeToMinutes = (time: string) => {
   return 0;
 };
 
+// Return the ordinal value of a number eg 1st, 2nd etc
 export const getDateOrdinal = (dateNumber: number) => {
   let ordinal;
   switch(dateNumber) {

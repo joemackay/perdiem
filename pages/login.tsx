@@ -8,6 +8,7 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
+// The business logic of the login page
 const LoginService =()=> {
   const saveToken = useAuth.use.saveToken();
   const [email, setEmail] = useState('user@tryperdiem.com');
@@ -47,8 +48,8 @@ const LoginService =()=> {
         saveToken({ access: response.token, refresh: response.token });
         router.navigate('/home');
       }
-    } catch (error) {
-      // Alert.alert('Login Failed', error.message || 'Invalid credentials');
+    } catch (error: any) {
+      console.log('Login Failed', error.message || 'Invalid credentials');
     } finally {
       setIsSigninInProgress(false);
     }

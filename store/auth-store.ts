@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User } from '../types/user';
 
+// Store the state of the user auth state
 type AuthState = {
   user: User | null;
   token: User | null;

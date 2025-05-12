@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/store/auth-store";
 import { useSchedulesStore } from "@/store/schedules-store";
 import React, { useEffect, useState } from "react";
-import { Platform, Text, View } from "react-native";
+import { Text, View } from "react-native";
 // import Timezone from 'react-native-timezone';
 import { Button } from "@/ui/button";
 import CustomDatePicker from "@/ui/CustomDatePicker";
@@ -13,11 +13,11 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Localization from 'expo-localization';
 import { router } from "expo-router";
+// import messaging from '@react-native-firebase/messaging';
 
-
+// This is the business logic of the homepage
 
 const HomeService =()=> {
-// const [date, setDate] = useState<Date | undefined>(undefined);
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showTimeSlotPicker, setShowTimeSlotPicker] = useState(false)
   const userInfo = useAuthStore((state)=> state.user)
@@ -51,8 +51,6 @@ const HomeService =()=> {
   }
 
   const onSelectDate = (dayOfTheMonth: number) => {
-    setShowDatePicker(Platform.OS === 'ios'); // iOS stays open, Android closes
-    // setDate(new Date());
     setSelectedDayOfTheMonth(dayOfTheMonth)
     setShowDatePicker(false);
     setChosenDate(dayOfTheMonth)
@@ -106,6 +104,117 @@ const HomeService =()=> {
       // }
       // addNotificationRequest()
     }, [timezone, greeting, selectedTime]);
+
+  //   PushNotification.configure({
+  //     // (optional) Called when Token is generated (iOS and Android)
+  //     onRegister: function (token) {
+  //         console.log('TOKEN:', token);
+  //     },
+
+  //     // (required) Called when a remote or local notification is opened or received
+  //     onNotification: function (notification) {
+  //         console.log('NOTIFICATION:', notification);
+
+  //         // Process the notification based on its type
+  //         if (notification.action === 'snooze') {
+  //             // Handle snooze action
+  //             console.log('User snoozed');
+  //         } else if (notification.action === 'dismiss') {
+  //             // Handle dismiss action
+  //             console.log('User dismissed');
+  //         }
+  //         // (required) Called when you finish processing the notification.
+  //         // Important for Android + iOS.
+  //         notification.finish('background');
+  //     },
+
+  //     // (optional) Schedule local notification
+  //     // onSchedule: (notification) => {
+  //     //     console.log('My Notification scheduled', notification);
+  //     // },
+
+  //     // (optional) Called when the user fails to register for remote notifications.
+  //     onRegistrationError: (err) => {
+  //         console.error(err.message, err);
+  //     },
+
+  //     // IOS ONLY (optional): default: all - Permissions to register.
+  //     permissions: {
+  //         alert: true,
+  //         badge: true,
+  //         sound: true,
+  //     },
+
+  //     // Should the initial notification be popped automatically
+  //     // default: true
+  //     popInitialNotification: true,
+
+  //     /**
+  //      * (optional) default: false
+  //      * - Specified if permissions (iOS) and token (Android and iOS) will requested or not,
+  //      * - if not, you must call PushNotification.requestPermissions() later
+  //      */
+  //     requestPermissions: true,
+  // });
+
+  useEffect(() => {
+    console.log('selectedTime=======>', selectedTime)
+    if (selectedTime) {
+        // scheduleNotification(selectedTime);
+    }
+  }, [selectedTime])
+
+  // const scheduleNotification = (selectedTime: string) => {
+  //     try {
+  //       // 1. Convert selectedTime string to a Date object
+  //       const [time, period] = selectedTime.split(' ');
+  //       let [hours, minutes] = time.split(':').map(Number);
+
+  //       if (period === 'PM' && hours !== 12) {
+  //           hours += 12;
+  //       } else if (period === 'AM' && hours === 12) {
+  //           hours = 0;
+  //       }
+
+  //       const fireDate = new Date();
+  //       fireDate.setHours(hours);
+  //       fireDate.setMinutes(minutes);
+  //       fireDate.setSeconds(0); // Ensure seconds are 0 for accuracy
+
+  //       // 2.  Check if the fireDate is in the past
+  //       const now = new Date();
+  //       if (fireDate < now) {
+  //           console.warn("Selected time is in the past.  Scheduling for tomorrow.");
+  //           fireDate.setDate(fireDate.getDate() + 1); // Schedule for tomorrow
+  //       }
+
+  //       // 3. Schedule the notification
+  //       PushNotification.scheduleLocalNotification({
+  //           channelId: "scheduled-time-channel", // Make sure this channel ID matches the one you created
+  //           title: "Time Reminder",
+  //           message: `Your scheduled time is ${selectedTime}!`,
+  //           date: fireDate, // Use the Date object
+  //           allowWhileIdle: true, // Optional: Allow notification when the app is in background
+  //           repeatType: 'day',
+  //       });
+  //       // console.log(`Notification scheduled for ${format(fireDate, 'yyyy-MM-dd HH:mm:ss')}`);
+
+  //     } catch (error) {
+  //         console.error("Error scheduling notification:", error);
+  //     }
+  // };
+
+  // // Optional: Create notification channels (required for Android O and above)
+  // PushNotification.createChannel({
+  //   channelId: "scheduled-time-channel", // (required)
+  //   channelName: "Scheduled Time Notifications", // (required)
+  //   channelDescription: "Notifications for scheduled times", // (optional)
+  //   soundName: "default", // (optional)
+  //   importance: 4, // (optional) e.g. Importance.HIGH - see node_modules/react-native-push-notification/lib/constants.js
+  //   vibrate: true, // (optional)
+  //   },
+  //   (created) => console.log(`Channel created: ${created}`) // (optional) callback
+  // );
   return (
     <>
       {/* <SafeAreaView> */}

@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+// Store the state of time schedules of the shop
 type ScheduleState = {
   timezone: string | null;
   selectedDayOfTheMonth: number | null;

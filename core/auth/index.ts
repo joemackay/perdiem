@@ -5,7 +5,11 @@ import type { TokenType } from './utils';
 import { getToken, removeToken, setToken } from './utils';
 
 interface AuthState {
+
+  // unique token retrieved from the server
   token: TokenType | null;
+
+  // check if user has gone idle - a nice to have
   status: 'idle' | 'signOut' | 'signIn';
   saveToken: (data: TokenType) => void;
   signOut: () => void;
