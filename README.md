@@ -1,9 +1,10 @@
-# Welcome to your Expo app 👋
+# Welcome to Time Scheduler 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Demo video on Loom
-   https://www.loom.com/share/7413ddd946a140d991fe43a9da1b49bc?sid=5186238b-00c9-4309-809a-0571af7123f3
+   [Demo Video](https://www.loom.com/share/7413ddd946a140d991fe43a9da1b49bc?sid=5186238b-00c9-4309-809a-0571af7123f3)
+
 
 ## Get started
 
@@ -38,10 +39,10 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    In the output, you'll find options to open the app in a
 
-   - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-   - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-   - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-   - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   - development build
+   - Android emulator
+   - iOS simulator
+   - Expo Go
 
    Enter i to select iOS simulator
 
@@ -83,7 +84,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
  
 ## Limitations
 1. The unit tests pass except for Google Authentication, and AsyncStorage
-2. To test the Google Login and Push notifications you need to test it on actual device
+2. The Google Login and Push notifications only work on an actual iOS device
 
 ## Notes on my approach.
 1. I opted to create simple date picker to demonstrate my skills
