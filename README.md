@@ -3,8 +3,8 @@
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Demo video on Loom
-   https://www.loom.com/share/52df6170614f4979a896f0cf3371503e?sid=370bc41f-8179-4d76-89b9-37a0764381b1
-   
+   https://www.loom.com/share/7413ddd946a140d991fe43a9da1b49bc?sid=5186238b-00c9-4309-809a-0571af7123f3
+
 ## Get started
 
 1. Install dependencies
