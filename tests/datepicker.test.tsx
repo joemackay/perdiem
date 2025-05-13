@@ -5,7 +5,7 @@ import React from 'react';
 describe('CustomDatePicker', () => {
   const mockDaysArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const mockCurrentDate = 5;
-  const mockMonthTitle = '11';
+  const mockMonthTitle = 5;
   const mockOnDateSelected = jest.fn();
   const mockOnCancelled = jest.fn();
 
@@ -14,7 +14,7 @@ describe('CustomDatePicker', () => {
       <CustomDatePicker
         daysArray={mockDaysArray}
         currentDate={mockCurrentDate}
-        monthTitle={mockMonthTitle}
+        monthNumber={mockMonthTitle}
         onDateSelected={mockOnDateSelected}
         onCancelled={mockOnCancelled}
       />
@@ -36,7 +36,7 @@ describe('CustomDatePicker', () => {
       <CustomDatePicker
         daysArray={mockDaysArray}
         currentDate={mockCurrentDate}
-        monthTitle={mockMonthTitle}
+        monthNumber={mockMonthTitle}
         onDateSelected={mockOnDateSelected}
         onCancelled={mockOnCancelled}
       />
@@ -56,7 +56,7 @@ describe('CustomDatePicker', () => {
       <CustomDatePicker
         daysArray={mockDaysArray}
         currentDate={mockCurrentDate}
-        monthTitle={mockMonthTitle}
+        monthNumber={mockMonthTitle}
         onDateSelected={mockOnDateSelected}
         onCancelled={mockOnCancelled}
       />
@@ -71,7 +71,7 @@ describe('CustomDatePicker', () => {
       <CustomDatePicker
         daysArray={mockDaysArray}
         currentDate={mockCurrentDate}
-        monthTitle={mockMonthTitle}
+        monthNumber={mockMonthTitle}
         onDateSelected={mockOnDateSelected}
         onCancelled={mockOnCancelled}
       />
@@ -82,33 +82,12 @@ describe('CustomDatePicker', () => {
     expect(dateButtons.length).toBe(mockDaysArray.length);
   });
 
-  // it('applies correct styling to date buttons', () => {
-  //   const { getByText } = render(
-  //     <CustomDatePicker
-  //       daysArray={mockDaysArray}
-  //       currentDate={mockCurrentDate}
-  //       monthTitle={mockMonthTitle}
-  //       onDateSelected={mockOnDateSelected}
-  //       onCancelled={mockOnCancelled}
-  //     />
-  //   );
-
-  //   const dateButton = getByText('1').parent;
-  //   // Check basic styling (note: RNTL can't directly check className)
-  //   expect(dateButton.props.style).toEqual(
-  //     expect.objectContaining({
-  //       borderRadius: expect.any(Number),
-  //       padding: expect.any(Number),
-  //     })
-  //   );
-  // });
-
   it('handles empty daysArray gracefully', () => {
     const { queryByTestId } = render(
       <CustomDatePicker
         daysArray={[]}
         currentDate={mockCurrentDate}
-        monthTitle={mockMonthTitle}
+        monthNumber={mockMonthTitle}
         onDateSelected={mockOnDateSelected}
         onCancelled={mockOnCancelled}
       />

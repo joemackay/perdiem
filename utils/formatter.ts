@@ -48,6 +48,7 @@ export const generateMonthlySequence = (startNumber: number) => {
   return sequence;
 }
 
+// Deprecated
 export const generateDaytimeIntervals12Hr = (startHour: number, startMinute: number, period: string, durationHours = 12) => {
   const intervals = [];
   let currentHour = startHour;

@@ -1,6 +1,7 @@
 // stores/authStore.ts
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { User } from '../types/user';
 
 // Store the state of the user auth state
@@ -25,7 +26,8 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ user: null }),
     }),
     { 
-      name: 'auth-storage'
+      name: 'auth-storage',
+      storage: createJSONStorage(() => AsyncStorage), // Explicitly use AsyncStorage
     }
   )
 );

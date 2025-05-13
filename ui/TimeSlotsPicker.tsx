@@ -4,7 +4,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 interface slotProps {
   slotArray: string[],
   onTimeSlotSelected: (slot: string) => void
-  testId? :string
+  testID? :string
 }
 const TimeSlots:React.FC<slotProps> =({ slotArray, onTimeSlotSelected }) => {
   return (

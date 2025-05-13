@@ -26,17 +26,19 @@ const DetailsService =() => {
     fetchSchedules();
 
     //convert the selected time to minutes for easy comparison
-    const selectedTimeMinutes = selectedTime ? timeToMinutes(selectedTime) : 0;
+    // if saved time is "9:00 - 9:15" we split it to get the 9:15
+    const selectedTimeMinutesStart = selectedTime ? timeToMinutes(selectedTime.split(' - ')[0]) : 0;
+    const selectedTimeMinutesEnd = selectedTime ? timeToMinutes(selectedTime.split(' - ')[1]) : 0;
 
     let isAvailable = storeSchedules.some((schedule) => {
-      return timeToMinutes(schedule.start_time) >= selectedTimeMinutes && 
-      selectedTimeMinutes <= timeToMinutes(schedule.end_time) && 
+      return timeToMinutes(schedule.start_time) >= selectedTimeMinutesStart && 
+      selectedTimeMinutesEnd <= timeToMinutes(schedule.end_time) && 
       schedule.day_of_week===selectedDayOfTheMonth && 
       schedule.is_open;
     })
     isAvailable = storeScheduleOverides.some((schedule) => {
-      return timeToMinutes(schedule.start_time) >= selectedTimeMinutes && 
-      selectedTimeMinutes <= timeToMinutes(schedule.end_time) && 
+      return timeToMinutes(schedule.start_time) >= selectedTimeMinutesStart && 
+      selectedTimeMinutesEnd <= timeToMinutes(schedule.end_time) && 
       schedule.day_of_week===selectedDayOfTheMonth && 
       schedule.is_open;
     })

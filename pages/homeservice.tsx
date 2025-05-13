@@ -3,16 +3,16 @@ import { Text, View } from "react-native";
 import { useAuthStore } from "../store/auth-store";
 import { useSchedulesStore } from "../store/schedules-store";
 // import Timezone from 'react-native-timezone';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import * as Localization from 'expo-localization';
+import { router } from "expo-router";
+import PushNotification from 'react-native-push-notification';
 import { Button } from "../ui/button";
 import CustomDatePicker from "../ui/CustomDatePicker";
 import TimeSlots from "../ui/TimeSlotsPicker";
 import TimezoneToggle from "../ui/TimeZoneToggle";
 import { generate24HourIntervals, generateMonthlySequence, getDateOrdinal } from '../utils/formatter';
-// import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import * as Localization from 'expo-localization';
-import { router } from "expo-router";
 // import messaging from '@react-native-firebase/messaging';
 
 // This is the business logic of the homepage
@@ -32,7 +32,7 @@ const HomeService =()=> {
   const [chosenTime, setChosenTime] = useState('None')
   const [currentGreeting, setCurrentGreeting] = useState('None')
   const daysArray = generateMonthlySequence(currentDay)
-  const timeSlotIntervals = generate24HourIntervals(8, 0, 12);
+  const timeSlotIntervals = generate24HourIntervals(Math.max(8, currentHour), 0, (18-currentHour));
   const [dateOrdinal, setDateOrdinal] = useState('')
 
   const myTimezone = Localization.timezone;
@@ -64,6 +64,7 @@ const HomeService =()=> {
   }
 
   const onSelectTime = (time: string) => {
+    console.log('onSelectTime', onSelectTime)
     setSelectedTime(time)
     setChosenTime(time)
     setShowTimeSlotPicker(false)
@@ -82,139 +83,134 @@ const HomeService =()=> {
   }
 
   useEffect(() => {
-      const timezone = Localization.timezone;
-      setMyTimeZone(timezone);
-      setCurrentGreeting(greeting);
-      // setUserInfo(user)
+    const timezone = Localization.timezone;
+    setMyTimeZone(timezone);
+    setCurrentGreeting(greeting);
+  }, [timezone, greeting, selectedTime]);
 
-      // const addNotificationRequest = () => {
-      //   PushNotificationIOS.addNotificationRequest({
-      //     id: 'test',
-      //     title: 'title',
-      //     subtitle: 'subtitle',
-      //     body: 'body',
-      //     category: 'test',
-      //     threadId: 'thread-id',
-      //     fireDate: new Date(new Date().valueOf() + 5000),
-      //     repeats: true,
-      //     userInfo: {
-      //       image: 'https://www.github.com/Naturalclar.png',
-      //     },
-      //   });
-      // }
-      // addNotificationRequest()
-    }, [timezone, greeting, selectedTime]);
+  PushNotification.configure({
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function (token) {
+        console.log('TOKEN:', token);
+    },
 
-  //   PushNotification.configure({
-  //     // (optional) Called when Token is generated (iOS and Android)
-  //     onRegister: function (token) {
-  //         console.log('TOKEN:', token);
-  //     },
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function (notification) {
+        console.log('NOTIFICATION:', notification);
 
-  //     // (required) Called when a remote or local notification is opened or received
-  //     onNotification: function (notification) {
-  //         console.log('NOTIFICATION:', notification);
+        // Process the notification based on its type
+        if (notification.action === 'snooze') {
+            // Handle snooze action
+            console.log('User snoozed');
+        } else if (notification.action === 'dismiss') {
+            // Handle dismiss action
+            console.log('User dismissed');
+        }
+        // (required) Called when you finish processing the notification.
+        // Important for Android + iOS.
+        notification.finish('background');
+    },
 
-  //         // Process the notification based on its type
-  //         if (notification.action === 'snooze') {
-  //             // Handle snooze action
-  //             console.log('User snoozed');
-  //         } else if (notification.action === 'dismiss') {
-  //             // Handle dismiss action
-  //             console.log('User dismissed');
-  //         }
-  //         // (required) Called when you finish processing the notification.
-  //         // Important for Android + iOS.
-  //         notification.finish('background');
-  //     },
+    // (optional) Schedule local notification
+    onAction: (notification) => {
+        console.log('My Notification scheduled', notification);
+    },
 
-  //     // (optional) Schedule local notification
-  //     // onSchedule: (notification) => {
-  //     //     console.log('My Notification scheduled', notification);
-  //     // },
+    // (optional) Called when the user fails to register for remote notifications.
+    onRegistrationError: (err) => {
+        console.error(err.message, err);
+    },
 
-  //     // (optional) Called when the user fails to register for remote notifications.
-  //     onRegistrationError: (err) => {
-  //         console.error(err.message, err);
-  //     },
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+    },
 
-  //     // IOS ONLY (optional): default: all - Permissions to register.
-  //     permissions: {
-  //         alert: true,
-  //         badge: true,
-  //         sound: true,
-  //     },
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: true,
 
-  //     // Should the initial notification be popped automatically
-  //     // default: true
-  //     popInitialNotification: true,
-
-  //     /**
-  //      * (optional) default: false
-  //      * - Specified if permissions (iOS) and token (Android and iOS) will requested or not,
-  //      * - if not, you must call PushNotification.requestPermissions() later
-  //      */
-  //     requestPermissions: true,
-  // });
+    /**
+     * (optional) default: false
+     * - Specified if permissions (iOS) and token (Android and iOS) will requested or not,
+     * - if not, you must call PushNotification.requestPermissions() later
+     */
+    requestPermissions: true,
+});
 
   useEffect(() => {
     console.log('selectedTime=======>', selectedTime)
     if (selectedTime) {
-        // scheduleNotification(selectedTime);
+      // if saved time is "9:00 - 9:15" we split it to get the 9:15
+      scheduleNotification(selectedTime.split(' - ')[1]);
     }
   }, [selectedTime])
 
-  // const scheduleNotification = (selectedTime: string) => {
-  //     try {
-  //       // 1. Convert selectedTime string to a Date object
-  //       const [time, period] = selectedTime.split(' ');
-  //       let [hours, minutes] = time.split(':').map(Number);
+  const scheduleNotification = (selectedTime: string) => {
+    try {
+      // 1. Convert selectedTime string to a Date object
+      const [time, period] = selectedTime.split(' ');
+      let [hours, minutes] = time.split(':').map(Number);
 
-  //       if (period === 'PM' && hours !== 12) {
-  //           hours += 12;
-  //       } else if (period === 'AM' && hours === 12) {
-  //           hours = 0;
-  //       }
+      if (period === 'PM' && hours !== 12) {
+          hours += 12;
+      } else if (period === 'AM' && hours === 12) {
+          hours = 0;
+      }
 
-  //       const fireDate = new Date();
-  //       fireDate.setHours(hours);
-  //       fireDate.setMinutes(minutes);
-  //       fireDate.setSeconds(0); // Ensure seconds are 0 for accuracy
+      const fireDate = new Date();
+      fireDate.setHours(hours);
+      fireDate.setMinutes(minutes);
+      fireDate.setSeconds(0); // Ensure seconds are 0 for accuracy
 
-  //       // 2.  Check if the fireDate is in the past
-  //       const now = new Date();
-  //       if (fireDate < now) {
-  //           console.warn("Selected time is in the past.  Scheduling for tomorrow.");
-  //           fireDate.setDate(fireDate.getDate() + 1); // Schedule for tomorrow
-  //       }
+      // 2.  Check if the fireDate is in the past
+      const now = new Date();
+      if (fireDate < now) {
+          console.warn("Selected time is in the past.  Scheduling for tomorrow.");
+          fireDate.setDate(fireDate.getDate() + 1); // Schedule for tomorrow
+      }
 
-  //       // 3. Schedule the notification
-  //       PushNotification.scheduleLocalNotification({
-  //           channelId: "scheduled-time-channel", // Make sure this channel ID matches the one you created
-  //           title: "Time Reminder",
-  //           message: `Your scheduled time is ${selectedTime}!`,
-  //           date: fireDate, // Use the Date object
-  //           allowWhileIdle: true, // Optional: Allow notification when the app is in background
-  //           repeatType: 'day',
-  //       });
-  //       // console.log(`Notification scheduled for ${format(fireDate, 'yyyy-MM-dd HH:mm:ss')}`);
+      // 3. Schedule the notification
+      PushNotification.scheduleLocalNotification({
+          channelId: "scheduled-time-channel", // Make sure this channel ID matches the one you created
+          title: "Time Reminder",
+          message: `Your scheduled time is ${selectedTime}!`,
+          date: fireDate, // Use the Date object
+          allowWhileIdle: true, // Optional: Allow notification when the app is in background
+          repeatType: 'day',
+      });
+      // console.log(`Notification scheduled for ${format(fireDate, 'yyyy-MM-dd HH:mm:ss')}`);
 
-  //     } catch (error) {
-  //         console.error("Error scheduling notification:", error);
-  //     }
-  // };
+    } catch (error) {
+        console.error("Error scheduling notification:", error);
+    }
+  };
 
-  // // Optional: Create notification channels (required for Android O and above)
-  // PushNotification.createChannel({
-  //   channelId: "scheduled-time-channel", // (required)
-  //   channelName: "Scheduled Time Notifications", // (required)
-  //   channelDescription: "Notifications for scheduled times", // (optional)
-  //   soundName: "default", // (optional)
-  //   importance: 4, // (optional) e.g. Importance.HIGH - see node_modules/react-native-push-notification/lib/constants.js
-  //   vibrate: true, // (optional)
-  //   },
-  //   (created) => console.log(`Channel created: ${created}`) // (optional) callback
-  // );
+  // Optional: Create notification channels (required for Android O and above)
+  PushNotification.createChannel({
+      channelId: "general", // (required)
+      channelName: "General Notifications", // (required)
+      channelDescription: "General notifications for the app", // (optional)
+      soundName: "default", // (optional)
+      importance: 4, // (optional) e.g. Importance.HIGH - see node_modules/react-native-push-notification/lib/constants.js
+      vibrate: true, // (optional)
+  },
+      (created) => console.log(`Channel created: ${created}`) // (optional) callback
+  );
+  const handleSendNotification = () => {
+          // Use PushNotification.localNotification to send an immediate notification
+          PushNotification.localNotification({
+              channelId: "general", //  Use the general channel
+              title: "Immediate Notification", // Notification title
+              message: "This is a notification sent immediately!", // Notification message
+              playSound: true,
+              soundName: 'default'
+          });
+          console.log('Notification sent immediately!');
+      };
+
   return (
     <>
       {/* <SafeAreaView> */}
@@ -238,10 +234,14 @@ const HomeService =()=> {
           </View>
           
           <View className="flex-col mb-4 bg-white  shadow-sm p-2">
+            <Button className="bg-blue-500 w-48" onPress={handleSendNotification}>Send notification</Button>
+          </View>
+          
+          <View className="flex-col mb-4 bg-white  shadow-sm p-2">
             <View className="flex-row justify-between">
               {!showDatePicker && !showTimeSlotPicker && 
                 <Button onPress={showDatepicker}
-                  className="bg-blue-300"
+                  className="bg-blue-500"
                   testID="test-select-date-button">Select Date</Button>}
               <Text className="pt-3">
                 {chosenDate > 0 ? (
@@ -259,12 +259,13 @@ const HomeService =()=> {
                   currentDate={currentDate}
                   onDateSelected={onSelectDate}
                   onCancelled={onDateSelectionCancelled}
-                  monthTitle={(currentMonth + 1).toString()}
+                  monthNumber={currentMonth}
                   testID="test-custom-date-picker"
                 />
                 )
               : null}
               {showTimeSlotPicker ? (
+                // Display available slots until 6pm
                 <TimeSlots
                   slotArray={timeSlotIntervals}
                   onTimeSlotSelected={onSelectTime}
