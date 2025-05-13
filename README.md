@@ -47,6 +47,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+3. Run unit tests
+
+   ```bash
+   npm test
+   ```  
+
 ## Run on iOS device
 
 1. First, generate native iOS directories using Prebuild
@@ -74,7 +80,21 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npx expo-doctor
    ```
-   
+ 
+## Limitations
+1. The unit tests pass except for Google Authentication, and AsyncStorage
+2. To test the Google Login and Push notifications you need to test it on actual device
+
+## Notes on my approach.
+1. I opted to create simple date picker to demonstrate my skills
+2. I included many tests in the unit tests to increase the test scope
+3. I included a button to send push notifications to save you the waiting time
+4. I used Zustand with AsyncStorage simply because they are faster and less boiler plate for a small app
+5. I used Tailwind to enhance the look of the app - though it has colour limitations for iOS
+6. I used a custom button, that I use in my other projects because it looks better has more room for props
+7. Some code(like Button) is borrowed from my existing projects at the moment
+8. I opted to avoid BottomSheet due to complications with iOS versions
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
