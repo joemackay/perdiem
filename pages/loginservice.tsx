@@ -20,7 +20,8 @@ const LoginService =()=> {
   useEffect(() => {
     // Configure Google Sign-In on component mount
     GoogleSignin.configure({
-      webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+      // webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+      webClientId: '911292730287-mptlnalmlo3s716849lgfccvf1rbit3i.apps.googleusercontent.com',
     });
 
     const unsubscribe = auth().onAuthStateChanged((authUser) => {
@@ -55,6 +56,7 @@ const LoginService =()=> {
       } else {
         console.log('Login Failed', 'Invalid credentials');
       }
+      setIsSigninInProgress(false);
     } finally {
       setIsSigninInProgress(false);
     }
@@ -75,16 +77,19 @@ const LoginService =()=> {
       // Try the new style of google-sign in result, from v13+ of that module
 
       idToken = signInResult.data?.idToken;
+      console.log('idToken======>', idToken)
       if (idToken) {
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         await auth().signInWithCredential(googleCredential);
         setError(null);
       } else {
-        setError('Could not retrieve Google ID token.');
+        setError(`Could not retrieve Google ID token ---. ${signInResult.type}`);
+        setIsSigninInProgress(false);
       }
     } catch (e: any) {
       if (e.code === statusCodes.SIGN_IN_CANCELLED) {
         // User cancelled the sign-in flow
+        console.error('Google Sign-in Cancelled:', e);
         setError('Sign in cancelled.');
       } else if (e.code === statusCodes.IN_PROGRESS) {
         // Operation (e.g. sign in) is in progress already
@@ -92,11 +97,13 @@ const LoginService =()=> {
       } else if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // Play services not available or outdated
         setError('Google Play Services not available. Please update.');
+        console.error('Google Sign-in Play Service not available:', e);
       } else {
         // Some other error happened
         setError(`Google Sign-in error: ${e.message}`);
         console.error('Google Sign-in error:', e);
       }
+      setIsSigninInProgress(false);
     }
   };
 

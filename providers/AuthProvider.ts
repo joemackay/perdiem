@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 
 // TODO: Apply in the layout or index file
 GoogleSignin.configure({
-  webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+  // webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+  webClientId: '911292730287-mptlnalmlo3s716849lgfccvf1rbit3i.apps.googleusercontent.com',
 });
 
 const AuthProvider = ({ children }: { children: any }) => {
