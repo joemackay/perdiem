@@ -109,9 +109,9 @@ const LoginService =()=> {
 
   return (
     <>
-      <View className='flex-1 justify-center p-4 bg-slate-300'>
+      <View className='flex-1 justify-center p-4 bg-white'>
         <Text className='text-2xl font-bold text-center mb-8'>Welcome to PerDiem</Text>
-        <Text className='text-2xl font-bold text-center mb-8'>Logins</Text>
+        <Text className='text-2xl font-bold text-center mb-8'>Login</Text>
         
         {error && (
           <View className="absolute top-10 left-0 right-0 items-center z-50">
@@ -148,20 +148,25 @@ const LoginService =()=> {
           <Text className='text-white text-center'>{isSigninInProgress ? 'Logging in...' : 'Login with Email'}</Text>
         </TouchableOpacity>
 
-        <GoogleSigninButton
+        <View className='justify-center items-center mt-2'>
+          <Text> - OR - </Text>
+        </View>
+        <View className='justify-center items-center mt-4'>
+          <GoogleSigninButton
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
             onPress={handleGoogleSignIn}
             disabled={isSigninInProgress}
           testID="test-google-login-button"
           />
+        </View>
 
-        <View className="justify-center items-center mt-10">
+        <View className="justify-center items-center mt-16">
           <Link 
             href={"/signup"} 
             className="text-blue-700 font-bold"
             testID="test-link-to-signup"
-          >Sign up</Link>
+          >Don&lsquo;t have an account? Sign up</Link>
         </View>
       </View>
     </>

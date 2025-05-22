@@ -39,9 +39,9 @@ export const generateMonthlySequence = (startNumber: number) => {
   const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
   
   const sequence = [];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 31; i++) {
     const day = (currentDayOfMonth + i - 1) % daysInMonth + 1;
-    const num = ((startNumber - 1 + i) % 30) + 1;
+    const num = ((startNumber - 1 + i) % 31) + 1;
     sequence.push({ day, number: num });
   }
   

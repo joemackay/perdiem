@@ -97,7 +97,7 @@ const SignUpService =()=> {
   };
   return (
     <>
-      <View className='flex-1 justify-center p-4 bg-slate-300'>
+      <View className='flex-1 justify-center p-4 bg-white'>
         <Text className='text-2xl font-bold text-center mb-8'>Welcome to PerDiem</Text>
         <Text className='text-2xl font-bold text-center mb-8'>Register</Text>
         
@@ -156,19 +156,24 @@ const SignUpService =()=> {
           <Text className='text-white text-center'>{isSignUpProgress ? 'Wait...' : 'Sign up with Email'}</Text>
         </TouchableOpacity>
         
-        <GoogleSigninButton
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark}
-            onPress={handleGoogleSignUp}
-            disabled={isSignUpProgress}
-          testID="test-google-signup-button"
-          />
-        <View className="justify-center items-center mt-5">
+        <View className='justify-center items-center mt-2'>
+          <Text> - OR - </Text>
+        </View>
+        <View className='justify-center items-center mt-4'>
+          <GoogleSigninButton
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={handleGoogleSignUp}
+              disabled={isSignUpProgress}
+            testID="test-google-signup-button"
+            />
+        </View>
+        <View className="justify-center items-center mt-16">
           <Link
             href={"/login"} 
             className="text-blue-700 font-bold"
             testID="test-link-to-login"
-          >Login</Link>
+          >Already have an account? Login</Link>
         </View>
       
       </View>
