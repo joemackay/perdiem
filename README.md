@@ -3,7 +3,7 @@
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Demo video on Loom
-   [Demo Video](https://www.loom.com/share/7413ddd946a140d991fe43a9da1b49bc?sid=5186238b-00c9-4309-809a-0571af7123f3)
+   [Demo Video](https://www.loom.com/share/7d65bfeec9a94071bc0e1012df842959?sid=2618c37e-ac4d-4185-9d2e-9c8e12e98cbc)
 
 
 ## Get started

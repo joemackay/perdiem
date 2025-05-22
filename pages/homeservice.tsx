@@ -12,7 +12,7 @@ import { Button } from "../ui/button";
 import CustomDatePicker from "../ui/CustomDatePicker";
 import TimeSlots from "../ui/TimeSlotsPicker";
 import TimezoneToggle from "../ui/TimeZoneToggle";
-import { generate24HourIntervals, generateMonthlySequence, getDateOrdinal } from '../utils/formatter';
+import { generateMonthlySequence, generateTimeSchedules, getDateOrdinal } from '../utils/formatter';
 // import messaging from '@react-native-firebase/messaging';
 
 // This is the business logic of the homepage
@@ -22,6 +22,7 @@ const HomeService =()=> {
   const [showTimeSlotPicker, setShowTimeSlotPicker] = useState(false)
   const userInfo = useAuthStore((state)=> state.user)
   const { logout } = useAuthStore()
+  const currentMinute = new Date().getMinutes();
   const currentHour = new Date().getHours();
   const currentDay = new Date().getDate();
   const currentDate = new Date().getDate();
@@ -29,10 +30,10 @@ const HomeService =()=> {
   const { timezone, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
   const [myTimeZone, setMyTimeZone] = useState('')
   const [chosenDate, setChosenDate] = useState(0)
-  const [chosenTime, setChosenTime] = useState('None')
+  const [chosenTime, setChosenTime] = useState('--')
   const [currentGreeting, setCurrentGreeting] = useState('None')
   const daysArray = generateMonthlySequence(currentDay)
-  const timeSlotIntervals = generate24HourIntervals(Math.max(8, currentHour), 0, (18-currentHour));
+  const timeSlotIntervals = generateTimeSchedules(Math.max(8, currentHour), currentMinute, (17-currentHour), 30);
   const [dateOrdinal, setDateOrdinal] = useState('')
 
   const myTimezone = Localization.timezone;

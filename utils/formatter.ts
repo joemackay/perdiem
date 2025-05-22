@@ -99,36 +99,69 @@ export const generateDaytimeIntervals12Hr = (startHour: number, startMinute: num
 }
 
 // Generate the time intervals to be displayed
-export const generate24HourIntervals = (startHour: number, startMinute: number, durationHours = 12) => {
+// export const generate24HourIntervals = (startHour: number, startMinute: number, durationHours = 12) => {
+//   const intervals = [];
+//   let currentHour = startHour;
+//   let currentMinute = startMinute;
+  
+//   for (let i = 0; i < durationHours * 2; i++) {
+//     // Format start time (HH:MM)
+//     const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+    
+//     // Calculate end time
+//     let endHour = currentHour;
+//     let endMinute = currentMinute + 30;
+    
+//     if (endMinute >= 60) {
+//       endMinute = endMinute % 60;
+//       endHour = (endHour + 1) % 24;
+//     }
+    
+//     // Format end time (HH:MM)
+//     const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+    
+//     intervals.push(`${startTime} - ${endTime}`);
+    
+//     // Update current time for next iteration
+//     currentHour = endHour;
+//     currentMinute = endMinute;
+//   }
+  
+//   return intervals;
+// }
+
+export const generateTimeSchedules = (
+  startHour: number,
+  startMinute: number,
+  durationHours = 12,
+  intervalMinutes = 30
+) => {
   const intervals = [];
-  let currentHour = startHour;
-  let currentMinute = startMinute;
-  
-  for (let i = 0; i < durationHours * 4; i++) {
-    // Format start time (HH:MM)
-    const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
-    
-    // Calculate end time
-    let endHour = currentHour;
-    let endMinute = currentMinute + 15;
-    
-    if (endMinute >= 60) {
-      endMinute = endMinute % 60;
-      endHour = (endHour + 1) % 24;
-    }
-    
-    // Format end time (HH:MM)
-    const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-    
-    intervals.push(`${startTime} - ${endTime}`);
-    
-    // Update current time for next iteration
-    currentHour = endHour;
-    currentMinute = endMinute;
+
+  // Create a Date object for the starting time
+  const now = new Date();
+  now.setHours(startHour, startMinute, 0, 0);
+
+  // Round up to the next valid interval
+  const totalMinutes = now.getHours() * 60 + now.getMinutes();
+  const roundedMinutes = Math.ceil(totalMinutes / intervalMinutes) * intervalMinutes;
+  now.setHours(Math.floor(roundedMinutes / 60), roundedMinutes % 60, 0, 0);
+
+  // Total number of intervals
+  const totalIntervals = Math.floor((durationHours * 60) / intervalMinutes);
+
+  for (let i = 0; i < totalIntervals; i++) {
+    const start = new Date(now.getTime() + i * intervalMinutes * 60000);
+    const end = new Date(start.getTime() + intervalMinutes * 60000);
+
+    const format = (date: Date) =>
+      `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+
+    intervals.push(`${format(start)} - ${format(end)}`);
   }
-  
+
   return intervals;
-}
+};
 
 // format the time from string 10:46 to integer value 646 to be used for comparison
 export const timeToMinutes = (time: string) => {
