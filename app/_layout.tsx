@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 // import 'react-native-reanimated';
 import "../global.css";
 
+import { APIProvider } from '@/providers/APIProvider';
 import { useColorScheme } from '../hooks/useColorScheme';
 
 export default function RootLayout() {
@@ -20,11 +21,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(dash)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+      <APIProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(dash)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </APIProvider>
     </ThemeProvider>
   );
 }
