@@ -51,7 +51,7 @@ const DetailsService =() => {
       schedule.is_open;
     })
     setStoreAvailability(isAvailable)
-  }, [scheduleOverrides, schedules, selectedDayOfTheMonth, selectedTime, storeScheduleOverides, storeSchedules]);
+  }, [scheduleOverrides, schedules, selectedDayOfTheMonth, selectedTime]);
 
   if (isLoading) {
     return (

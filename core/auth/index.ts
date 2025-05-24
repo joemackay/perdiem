@@ -1,17 +1,18 @@
 import { create } from 'zustand';
 
 import { createSelectors } from '../utils';
-import type { TokenType } from './utils';
+// import type { TokenType } from './utils';
 import { getToken, removeToken, setToken } from './utils';
+// import * as SecureStore from 'expo-secure-store';
 
 interface AuthState {
 
   // unique token retrieved from the server
-  token: TokenType | null;
+  token: string | null;
 
   // check if user has gone idle - a nice to have
   status: 'idle' | 'signOut' | 'signIn';
-  saveToken: (data: TokenType) => void;
+  saveToken: (token: string) => void;
   signOut: () => void;
   hydrate: () => void;
 }
@@ -27,9 +28,9 @@ const _useAuth = create<AuthState>((set, get) => ({
     removeToken();
     set({ status: 'signOut', token: null });
   },
-  hydrate: () => {
+  hydrate: async () => {
     try {
-      const userToken = getToken();
+      const userToken = await getToken();
       if (userToken !== null) {
         get().saveToken(userToken);
       } else {
@@ -45,5 +46,5 @@ const _useAuth = create<AuthState>((set, get) => ({
 export const useAuth = createSelectors(_useAuth);
 
 export const signOut = () => _useAuth.getState().signOut();
-export const saveToken = (token: TokenType) => _useAuth.getState().saveToken(token);
+export const saveToken = (token: string) => _useAuth.getState().saveToken(token);
 export const hydrateAuth = () => _useAuth.getState().hydrate();

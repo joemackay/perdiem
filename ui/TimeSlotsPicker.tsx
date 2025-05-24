@@ -1,15 +1,22 @@
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Button } from "./button";
 
 interface slotProps {
   slotArray: string[],
   onTimeSlotSelected: (slot: string) => void
+  onTimeSlotCancelled: () => void
   testID? :string
 }
-const TimeSlots:React.FC<slotProps> =({ slotArray, onTimeSlotSelected }) => {
+const TimeSlots:React.FC<slotProps> =({ slotArray, onTimeSlotSelected, onTimeSlotCancelled }) => {
+  console.log('TimeSlots called')
+  console.log('slotArray', slotArray)
   return (
     <View>
-      <Text>Select Time</Text>
+      <View className="flex-row justify-between px-2">
+        <Text className='text-center mt-2'>Select Time</Text>
+        <Button onPress={() => onTimeSlotCancelled()} className="bg-slate-500 w-15 h-10 text-center items-center" testID="test-date-picker-close-button"> X</Button>
+      </View>
       <View className="mb-80">
         <ScrollView>
           <View className='flex-wrap flex-col'>

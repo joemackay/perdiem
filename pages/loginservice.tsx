@@ -37,7 +37,7 @@ const LoginService =()=> {
     });
 
     return unsubscribe; // Unsubscribe from the listener when the component unmounts
-  }, [])
+  }, [setUser])
 
   const handleEmailLogin = async () => {
     console.log('handleEmailLogin')

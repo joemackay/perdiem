@@ -27,13 +27,13 @@ const HomeService =()=> {
   const currentDay = new Date().getDate();
   const currentDate = new Date().getDate();
   const currentMonth = new Date().getMonth();
-  const { timezone, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
+  const { timezone, selectedDayOfTheMonth, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
   const [myTimeZone, setMyTimeZone] = useState('')
   const [chosenDate, setChosenDate] = useState(0)
   const [chosenTime, setChosenTime] = useState('--')
   const [currentGreeting, setCurrentGreeting] = useState('None')
   const daysArray = generateMonthlySequence(currentDay)
-  const timeSlotIntervals = generateTimeSchedules(Math.max(8, currentHour), currentMinute, (17-currentHour), 30);
+  const timeSlotIntervals = generateTimeSchedules(Math.max(8, currentHour), currentMinute, (19-currentHour), 30);
   const [dateOrdinal, setDateOrdinal] = useState('')
 
   const myTimezone = Localization.timezone;
@@ -201,16 +201,19 @@ const HomeService =()=> {
       (created) => console.log(`Channel created: ${created}`) // (optional) callback
   );
   const handleSendNotification = () => {
-          // Use PushNotification.localNotification to send an immediate notification
-          PushNotification.localNotification({
-              channelId: "general", //  Use the general channel
-              title: "Immediate Notification", // Notification title
-              message: "This is a notification sent immediately!", // Notification message
-              playSound: true,
-              soundName: 'default'
-          });
-          console.log('Notification sent immediately!');
-      };
+      // Use PushNotification.localNotification to send an immediate notification
+      PushNotification.localNotification({
+          channelId: "general", //  Use the general channel
+          title: "Immediate Notification", // Notification title
+          message: "This is a notification sent immediately!", // Notification message
+          playSound: true,
+          soundName: 'default'
+      });
+      console.log('Notification sent immediately!');
+  };
+
+  const mSelectedDate = selectedDayOfTheMonth || chosenDate
+  const mSelectedTime = selectedTime || chosenTime
 
   return (
     <>
@@ -245,9 +248,9 @@ const HomeService =()=> {
                   className="bg-blue-500"
                   testID="test-select-date-button">Select Date</Button>}
               <Text className="pt-3">
-                {chosenDate > 0 ? (
+                {mSelectedDate > 0 ? (
                   <>
-                    You selected {chosenDate}{dateOrdinal} at {chosenTime}
+                    You selected {mSelectedDate}{dateOrdinal} at {mSelectedTime}
                   </>
                 ): null }
                 
@@ -270,6 +273,7 @@ const HomeService =()=> {
                 <TimeSlots
                   slotArray={timeSlotIntervals}
                   onTimeSlotSelected={onSelectTime}
+                  onTimeSlotCancelled={()=> setShowTimeSlotPicker(false)}
                   testID="test-time-slots"
                 />
               ): null}

@@ -136,6 +136,11 @@ export const generateTimeSchedules = (
   durationHours = 12,
   intervalMinutes = 30
 ) => {
+  // console.log('===============')
+  // console.log('startHour', startHour)
+  // console.log('startMinute', startMinute)
+  // console.log('durationHours', durationHours)
+  // console.log('intervalMinutes', intervalMinutes)
   const intervals = [];
 
   // Create a Date object for the starting time
@@ -144,11 +149,13 @@ export const generateTimeSchedules = (
 
   // Round up to the next valid interval
   const totalMinutes = now.getHours() * 60 + now.getMinutes();
+  // console.log('totalMinutes', totalMinutes)
   const roundedMinutes = Math.ceil(totalMinutes / intervalMinutes) * intervalMinutes;
   now.setHours(Math.floor(roundedMinutes / 60), roundedMinutes % 60, 0, 0);
 
   // Total number of intervals
   const totalIntervals = Math.floor((durationHours * 60) / intervalMinutes);
+  // console.log('totalIntervals', totalIntervals)
 
   for (let i = 0; i < totalIntervals; i++) {
     const start = new Date(now.getTime() + i * intervalMinutes * 60000);
@@ -159,6 +166,7 @@ export const generateTimeSchedules = (
 
     intervals.push(`${format(start)} - ${format(end)}`);
   }
+  // console.log('intervals', intervals)
 
   return intervals;
 };
