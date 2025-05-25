@@ -23,8 +23,7 @@ const SignUpService =()=> {
   useEffect(() => {
     // Configure Google Sign-In on component mount
     GoogleSignin.configure({
-      // webClientId:process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
-      webClientId:'911292730287-mptlnalmlo3s716849lgfccvf1rbit3i.apps.googleusercontent.com',
+      webClientId:process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
     });
 
     const unsubscribe = auth().onAuthStateChanged((authUser) => {
