@@ -6,7 +6,7 @@ const AppLayout = () => {
       <Stack screenOptions={{ headerShown: true, headerBackTitle: 'Back' }}>
         <Stack.Screen name="login" />
         <Stack.Screen name="signup" />
-        <Stack.Screen name="home" />
+        <Stack.Screen name="home" options={{headerBackVisible: false, headerLeft: ()=> null}} />
         <Stack.Screen name="details" />
       </Stack>
     </>

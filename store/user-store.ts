@@ -5,7 +5,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { User } from '../types/user';
 
 // Store the state of the user auth state
-type AuthState = {
+type UserState = {
   user: User | null;
   token: User | null;
   setUser: (user: User) => void;
@@ -13,7 +13,7 @@ type AuthState = {
   logout: () => void;
 };
 
-export const useAuthStore = create<AuthState>()(
+export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
       user: null,
@@ -23,7 +23,10 @@ export const useAuthStore = create<AuthState>()(
         const state = get();
         return state.user;
       },
-      logout: () => set({ user: null }),
+      logout: () => {
+        console.log('2. useUserStore logout')
+        set({ user: null })
+      },
     }),
     { 
       name: 'auth-storage',

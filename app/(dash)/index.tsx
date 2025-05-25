@@ -1,15 +1,17 @@
 import React from "react";
-import { useAuthStore } from '../../store/auth-store';
+// import { useUserStore } from '../../store/auth-store';
+import { useAuthProvider } from "@/providers/AuthProvider";
 import HomeScreen from "./home";
 import LoginScreen from "./login";
 
 // The entry point in the app
 export default function App() {
-  const { getUser } = useAuthStore();
-  const user = getUser()
+  // const { getUser } = useUserStore();
+  // const user = getUser()
+  const { hasSession } = useAuthProvider();
   return (
     <>
-      {user ? <HomeScreen /> : <LoginScreen />}
+      {hasSession ? <HomeScreen /> : <LoginScreen />}
     </>
   )
 }

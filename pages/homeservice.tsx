@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import { useAuthStore } from "../store/auth-store";
 import { useSchedulesStore } from "../store/schedules-store";
+import { useUserStore } from "../store/user-store";
 // import Timezone from 'react-native-timezone';
-import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useAuthProvider } from "@/providers/AuthProvider";
 import * as Localization from 'expo-localization';
 import { router } from "expo-router";
 import PushNotification from 'react-native-push-notification';
@@ -20,22 +19,25 @@ import { generateMonthlySequence, generateTimeSchedules, getDateOrdinal } from '
 const HomeService =()=> {
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showTimeSlotPicker, setShowTimeSlotPicker] = useState(false)
-  const userInfo = useAuthStore((state)=> state.user)
-  const { logout } = useAuthStore()
-  const currentMinute = new Date().getMinutes();
-  const currentHour = new Date().getHours();
-  const currentDay = new Date().getDate();
-  const currentDate = new Date().getDate();
-  const currentMonth = new Date().getMonth();
+  const userInfo = useUserStore((state)=> state.user)
   const { timezone, selectedDayOfTheMonth, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
   const [myTimeZone, setMyTimeZone] = useState('')
   const [chosenDate, setChosenDate] = useState(0)
   const [chosenTime, setChosenTime] = useState('--')
   const [currentGreeting, setCurrentGreeting] = useState('None')
+  const [dateOrdinal, setDateOrdinal] = useState('')
+  const { signOut } = useAuthProvider()
+
+  const myDate = new Date();
+  const currentMinute = myDate.getMinutes();
+  const currentHour = myDate.getHours();
+  const currentDay = myDate.getDate();
+  const currentDate = myDate.getDate();
+  const currentMonth = myDate.getMonth();
   const daysArray = generateMonthlySequence(currentDay)
   const timeSlotIntervals = generateTimeSchedules(Math.max(8, currentHour), currentMinute, (19-currentHour), 30);
-  const [dateOrdinal, setDateOrdinal] = useState('')
 
+  // Process greetings based on time of the day. Time of the day is based on the timezone selected by the user
   const myTimezone = Localization.timezone;
   const myCity = myTimezone?.split('/')[1]
   let greeting = '';
@@ -51,6 +53,10 @@ const HomeService =()=> {
     greeting = `Night Owl in ${myCity}!`;
   }
 
+  // Display the date picker
+  const showDatepicker = () => setShowDatePicker(true);
+
+  // Handle date selection
   const onSelectDate = (dayOfTheMonth: number) => {
     setSelectedDayOfTheMonth(dayOfTheMonth)
     setShowDatePicker(false);
@@ -60,10 +66,10 @@ const HomeService =()=> {
     setDateOrdinal(ordinal);
   };
 
-  const onDateSelectionCancelled = () => {
-    setShowDatePicker(false)
-  }
+  // User closes date widget without selecting date
+  const onDateSelectionCancelled = () => setShowDatePicker(false)
 
+  // User selects time
   const onSelectTime = (time: string) => {
     console.log('onSelectTime', onSelectTime)
     setSelectedTime(time)
@@ -72,15 +78,16 @@ const HomeService =()=> {
     router.push('/details')
   }
 
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-  };
+  // User clicked on logout
+  const handleLogout = async () => {
+    console.log('1. handleLogout()')
 
-  const handleLogout =async () => {
-    logout()
+    // Clear user info from local storage(AuthProvider)
+    signOut()
+
+    // Go to login page
     router.replace('/login')
-    await GoogleSignin.revokeAccess();
-    await auth().signOut();
+
   }
 
   useEffect(() => {
@@ -212,7 +219,10 @@ const HomeService =()=> {
       console.log('Notification sent immediately!');
   };
 
+  // Display either of selected date or store date
   const mSelectedDate = selectedDayOfTheMonth || chosenDate
+
+  // Display either of selected time or store time
   const mSelectedTime = selectedTime || chosenTime
 
   return (

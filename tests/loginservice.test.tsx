@@ -1,5 +1,5 @@
 import { loginWithEmail } from '@/api/auth';
-import { useAuthStore } from '@/store/auth-store';
+import { useUserStore } from '@/store/user-store';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import LoginService from '../pages/loginservice'; // adjust path as needed
@@ -19,7 +19,7 @@ jest.mock('@/core/auth', () => ({
   },
 }));
 jest.mock('@/store/auth-store', () => ({
-  useAuthStore: () => ({
+  useUserStore: () => ({
     setUser: jest.fn(),
   }),
 }));
@@ -75,7 +75,7 @@ describe('LoginService', () => {
     await waitFor(() => {
       expect(loginWithEmail).toHaveBeenCalledWith('user@tryperdiem.com', 'password');
       // expect(useAuth.use.saveToken).toHaveBeenCalledWith({ access: 'abc123', refresh: 'abc123' });
-      expect(useAuthStore().setUser).toHaveBeenCalledWith(mockResponse);
+      expect(useUserStore().setUser).toHaveBeenCalledWith(mockResponse);
     });
   });
 

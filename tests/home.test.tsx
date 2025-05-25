@@ -1,5 +1,5 @@
-import { useAuthStore } from '@/store/auth-store';
 import { useSchedulesStore } from '@/store/schedules-store';
+import { useUserStore } from '@/store/user-store';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import React from 'react';
@@ -25,7 +25,7 @@ jest.mock('expo-localization', () => ({
 // Mock Firebase and Google Signin
 jest.mock('@react-native-firebase/auth', () => ({
   auth: () => ({
-    signOut: jest.fn(),
+    logout: jest.fn(),
   }),
 }));
 
@@ -49,7 +49,7 @@ describe('HomeService', () => {
     jest.clearAllMocks();
 
     // Mock the auth store
-    (useAuthStore as unknown as jest.Mock).mockImplementation((selector) => {
+    (useUserStore as unknown as jest.Mock).mockImplementation((selector) => {
       if (selector === jest.fn()) {
         return mockUserInfo;
       }

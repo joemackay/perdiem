@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { signupWithEmail } from "../api/auth";
 import { useAuth } from '../core/auth';
-import { useAuthStore } from "../store/auth-store";
+import { useUserStore } from "../store/user-store";
 
 
 // The business logic of the sign up page
@@ -17,7 +17,7 @@ const SignUpService =()=> {
   const [names, setNames] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSignUpProgress, setIsSignUpInProgress] = useState(false);
-  const { setUser } = useAuthStore()
+  const { setUser } = useUserStore()
   // const { promptAsync } = useGoogleAuth();
   
   useEffect(() => {

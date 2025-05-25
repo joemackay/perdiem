@@ -4,17 +4,17 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { loginWithEmail } from "../api/auth";
-import { useAuth } from '../core/auth';
-import { useAuthStore } from "../store/auth-store";
+import { _useAuth } from '../core/auth';
+import { useUserStore } from "../store/user-store";
 
 // The business logic of the login page
 const LoginService =()=> {
-  const saveToken = useAuth.use.saveToken();
+  const { saveToken } = _useAuth();
   const [email, setEmail] = useState('user@tryperdiem.com');
   const [password, setPassword] = useState('password');
   const [error, setError] = useState<string | null>(null);
   const [isSigninInProgress, setIsSigninInProgress] = useState(false);
-  const { setUser } = useAuthStore()
+  const { setUser } = useUserStore()
   // const { promptAsync } = useGoogleAuth();
 
   useEffect(() => {
