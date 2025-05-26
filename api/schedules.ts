@@ -2,8 +2,7 @@
 import { StoreScheduleType } from "@/types/storescheduletime";
 import axios from "axios";
 import { createQuery } from 'react-query-kit';
-// const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
-const BASE_URL = 'https://coding-challenge-pd-1a25b1a14f34.herokuapp.com';
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 // src/api/storeApi.ts
 const api_username = process.env.EXPO_PUBLIC_API_AUTH_USERNAME
 const api_pass = process.env.EXPO_PUBLIC_API_AUTH_PASS
@@ -14,6 +13,9 @@ const queryOptions = {
   refetchOnMount: false,
 };
 
+/**
+ * User React Query to fetch store schedules
+ */
 export const fetchStoreSchedules = createQuery<StoreScheduleType[]>({
   queryKey: ['schedules'],
   fetcher: () =>  axios.get(`${BASE_URL}/store-times/`, { 
@@ -24,6 +26,9 @@ export const fetchStoreSchedules = createQuery<StoreScheduleType[]>({
   ...queryOptions
 })
 
+/**
+ * User React Query to fetch store overrides
+ */
 export const fetchStoreScheduleOverrides = createQuery<StoreScheduleType[]>({
   queryKey: ['schedules'],
   fetcher: () =>  axios.get(`${BASE_URL}/store-overrides/`, { 

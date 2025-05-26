@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 import { useSchedulesStore } from "../store/schedules-store";
 import { useUserStore } from "../store/user-store";
 // import Timezone from 'react-native-timezone';
@@ -35,7 +35,7 @@ const HomeService =()=> {
   const currentDate = myDate.getDate();
   const currentMonth = myDate.getMonth();
   const daysArray = generateMonthlySequence(currentDay)
-  const timeSlotIntervals = generateTimeSchedules(Math.max(8, currentHour), currentMinute, (19-currentHour), 30);
+  const timeSlotIntervals = useMemo(() => generateTimeSchedules(Math.max(8, currentHour), currentMinute, (17-currentHour), 30), [currentMinute, currentMinute]) ;
 
   // Process greetings based on time of the day. Time of the day is based on the timezone selected by the user
   const myTimezone = Localization.timezone;
@@ -71,7 +71,6 @@ const HomeService =()=> {
 
   // User selects time
   const onSelectTime = (time: string) => {
-    console.log('onSelectTime', onSelectTime)
     setSelectedTime(time)
     setChosenTime(time)
     setShowTimeSlotPicker(false)
@@ -80,14 +79,11 @@ const HomeService =()=> {
 
   // User clicked on logout
   const handleLogout = async () => {
-    console.log('1. handleLogout()')
-
     // Clear user info from local storage(AuthProvider)
     signOut()
 
     // Go to login page
     router.replace('/login')
-
   }
 
   useEffect(() => {
@@ -148,8 +144,8 @@ const HomeService =()=> {
     requestPermissions: true,
 });
 
+  // Automatically reschedule push notification
   useEffect(() => {
-    console.log('selectedTime=======>', selectedTime)
     if (selectedTime) {
       // if saved time is "9:00 - 9:15" we split it to get the 9:15
       scheduleNotification(selectedTime.split(' - ')[1]);
@@ -228,12 +224,12 @@ const HomeService =()=> {
   return (
     <>
       {/* <SafeAreaView> */}
-      <View className="flex-1 bg-gray-100">
+      <ScrollView className="flex-1 bg-gray-100">
         <View className="p-2 h-full">
           <View className="flex-row justify-between mt-2 mb-4 bg-white shadow-sm p-2">
             <View>
               <Text className="text-2xl text-bold text-black">{userInfo?.fname}</Text>
-              <Text className="text-md">{currentGreeting}</Text>
+              <Text className="text-sm text-gray-500">{currentGreeting}</Text>
             </View>
             <View>
               <Button
@@ -290,7 +286,7 @@ const HomeService =()=> {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   )
 }

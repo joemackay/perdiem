@@ -4,7 +4,7 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { loginWithEmail } from "../api/auth";
-import { _useAuth } from '../core/auth';
+import { _useAuth } from '../store/auth-store';
 import { useUserStore } from "../store/user-store";
 
 // The business logic of the login page

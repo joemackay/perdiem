@@ -27,6 +27,9 @@ const CustomDatePicker: React.FC<datePickerType> = ({ daysArray, currentDate, mo
         <View className='flex-wrap flex-row mt-2 pb-2'>
           {daysArray.map((day: number, index: number) => (
             <View key={index} className="bg-slate-200 rounded-md p-2 m-2 border-1 border-slate-400 w-12 h-12 justify-center items-center">
+              {/* Highlight the current date */}
+              <View className={`absolute top-0 right-0 bg-blue-500 rounded-full w-4 h-4 ${day === currentDate ? 'visible' : 'invisible'}`} />
+              {/* Render the day button */}
               <TouchableOpacity
                 onPress={() => onDateSelected(day)}
                 testID="test-date-button"

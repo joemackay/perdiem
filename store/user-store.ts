@@ -7,7 +7,6 @@ import { User } from '../types/user';
 // Store the state of the user auth state
 type UserState = {
   user: User | null;
-  token: User | null;
   setUser: (user: User) => void;
   getUser: () => User | null;
   logout: () => void;
@@ -16,13 +15,20 @@ type UserState = {
 export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
+
+      // User record
       user: null,
-      token: null,
+
+      // Store user record
       setUser: (user) => set({ user }),
+
+      // Get  user record
       getUser: () => {
         const state = get();
         return state.user;
       },
+
+      // Clear user record
       logout: () => {
         console.log('2. useUserStore logout')
         set({ user: null })

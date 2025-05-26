@@ -6,9 +6,14 @@ export const client = axios.create({
   baseURL: BASE_URL,
 });
 
+/**
+ * Login with form
+ * @param email 
+ * @param password 
+ * @returns 
+ */
 export const loginWithEmail = async (email: string, password:string) => {
-  // console.log('loginWithEmail BASE_URL', `${BASE_URL}/auth/`)
-  // console.log('All env vars:', process.env);
+
   try {
     const response = await axios.post(`${BASE_URL}/auth/`, {
       email,
@@ -30,6 +35,15 @@ export const loginWithEmail = async (email: string, password:string) => {
   }
 };
 
+
+/**
+ * Sign up with form
+ * @param names 
+ * @param phone 
+ * @param email 
+ * @param password 
+ * @returns 
+ */
 export const signupWithEmail = async (names: string, phone: string, email: string, password:string) => {
   console.log('loginWithEmail')
   try {

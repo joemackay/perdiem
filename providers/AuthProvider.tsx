@@ -1,5 +1,5 @@
 // src/auth/googleAuth.ts
-import { _useAuth } from '@/core/auth';
+import { _useAuth } from '@/store/auth-store';
 import { useUserStore } from '@/store/user-store';
 import { User } from '@/types/user';
 import auth from '@react-native-firebase/auth';

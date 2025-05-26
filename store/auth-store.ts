@@ -2,10 +2,6 @@ import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// import { createSelectors } from '../utils';
-// import type { TokenType } from './utils';
-// import * as SecureStore from 'expo-secure-store';
-
 const TOKEN = 'token';
 
 interface AuthState {
@@ -51,9 +47,3 @@ export const _useAuth = create<AuthState>()(
       name: 'auth-storage' 
     }
 ));
-
-// export const useAuth = createSelectors(_useAuth);
-
-// export const getToken = () => _useAuth.getState().getToken();
-// export const clearToken = () => _useAuth.getState().clearToken();
-// export const saveToken = (token: string) => _useAuth.getState().saveToken(token);

@@ -4,7 +4,7 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { signupWithEmail } from "../api/auth";
-import { useAuth } from '../core/auth';
+import { useAuth } from '../store/auth-store';
 import { useUserStore } from "../store/user-store";
 
 
