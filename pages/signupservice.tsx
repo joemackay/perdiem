@@ -4,13 +4,13 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { signupWithEmail } from "../api/auth";
-import { useAuth } from '../store/auth-store';
+import { _useAuth } from '../store/auth-store';
 import { useUserStore } from "../store/user-store";
 
 
 // The business logic of the sign up page
 const SignUpService =()=> {
-  const saveToken = useAuth.use.saveToken();
+  const { saveToken } = _useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');

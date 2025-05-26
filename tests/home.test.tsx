@@ -3,7 +3,22 @@ import { router } from 'expo-router';
 import React from 'react';
 import HomeService from '../pages/homeservice';
 
-// Mock the Zustand stores
+// 
+jest.mock('react-native-push-notification', () => {
+  return {
+    configure: jest.fn(),
+    createChannel: jest.fn(),
+    localNotification: jest.fn(),
+    cancelAllLocalNotifications: jest.fn(),
+    removeAllDeliveredNotifications: jest.fn(),
+    getChannels: jest.fn().mockResolvedValue(['default']),
+    checkPermissions: jest.fn((cb) =>
+      cb({ alert: true, badge: true, sound: true })
+    ),
+    requestPermissions: jest.fn().mockResolvedValue(true),
+    onNotification: jest.fn(),
+  };
+});
 
 // Mock expo-router
 jest.mock('expo-router', () => ({

@@ -29,6 +29,18 @@ jest.mock('@react-native-google-signin/google-signin', () => ({
     IN_PROGRESS: 'IN_PROGRESS',
     PLAY_SERVICES_NOT_AVAILABLE: 'PLAY_SERVICES_NOT_AVAILABLE',
   },
+
+  GoogleSigninButton: {
+    Size: {
+      Icon: 0,
+      Standard: 1,
+      Wide: 2,
+    },
+    Color: {
+      Dark: 0,
+      Light: 1,
+    },
+  },
   // GoogleSigninButton: ({ onPress }: any) => (
   //   <Button onPress={onPress} testID="google-signin-button">Google Signin</Button>
   // ),
