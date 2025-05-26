@@ -98,38 +98,6 @@ export const generateDaytimeIntervals12Hr = (startHour: number, startMinute: num
   return intervals;
 }
 
-// Generate the time intervals to be displayed
-// export const generate24HourIntervals = (startHour: number, startMinute: number, durationHours = 12) => {
-//   const intervals = [];
-//   let currentHour = startHour;
-//   let currentMinute = startMinute;
-  
-//   for (let i = 0; i < durationHours * 2; i++) {
-//     // Format start time (HH:MM)
-//     const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
-    
-//     // Calculate end time
-//     let endHour = currentHour;
-//     let endMinute = currentMinute + 30;
-    
-//     if (endMinute >= 60) {
-//       endMinute = endMinute % 60;
-//       endHour = (endHour + 1) % 24;
-//     }
-    
-//     // Format end time (HH:MM)
-//     const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-    
-//     intervals.push(`${startTime} - ${endTime}`);
-    
-//     // Update current time for next iteration
-//     currentHour = endHour;
-//     currentMinute = endMinute;
-//   }
-  
-//   return intervals;
-// }
-
 export const generateTimeSchedules = (
   startHour: number,
   startMinute: number,
@@ -143,23 +111,25 @@ export const generateTimeSchedules = (
   // console.log('intervalMinutes', intervalMinutes)
   const intervals = [];
 
+  // 1. Handle starting time
   // Create a Date object for the starting time
   const now = new Date();
   now.setHours(startHour, startMinute, 0, 0);
 
-  // Round up to the next valid interval
-  const totalMinutes = now.getHours() * 60 + now.getMinutes();
+  // 2. Round up to the next valid interval
+  // Assuming the crrent time is 10:15am and the interval is 30 minutes
+  const totalMinutes = now.getHours() * 60 + now.getMinutes(); // 10:15am => 10 * 60 = 600 + 15 = 615
   // console.log('totalMinutes', totalMinutes)
-  const roundedMinutes = Math.ceil(totalMinutes / intervalMinutes) * intervalMinutes;
-  now.setHours(Math.floor(roundedMinutes / 60), roundedMinutes % 60, 0, 0);
+  const roundedMinutes = Math.ceil(totalMinutes / intervalMinutes) * intervalMinutes; // 615/30 = 20.5 => 21 * 30 = 630
+  now.setHours(Math.floor(roundedMinutes / 60), roundedMinutes % 60, 0, 0); // 630 => 10:30am
 
-  // Total number of intervals
-  const totalIntervals = Math.floor((durationHours * 60) / intervalMinutes);
+  // 3. Total number of intervals
+  const totalIntervals = Math.floor((durationHours * 60) / intervalMinutes); // 12 hours * 60 minutes = 720 minutes / 30 minutes = 24 intervals
   // console.log('totalIntervals', totalIntervals)
 
   for (let i = 0; i < totalIntervals; i++) {
-    const start = new Date(now.getTime() + i * intervalMinutes * 60000);
-    const end = new Date(start.getTime() + intervalMinutes * 60000);
+    const start = new Date(now.getTime() + i * intervalMinutes * 60000); // start = 10:30am + i * 30 minutes //60000 is the number of milliseconds in a minute
+    const end = new Date(start.getTime() + intervalMinutes * 60000); // end = start + 30 minutes
 
     const format = (date: Date) =>
       `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
@@ -175,8 +145,6 @@ export const generateTimeSchedules = (
 export const timeToMinutes = (time: string) => {
   if (time !== "") {
     const [hours, minutes] = (time || '00:00').split(':').map(Number);
-    // const timeParts = typeof time === 'string' ? time.split(':') : ['0', '0'];
-    // const [hours, minutes] = timeParts.map(Number);
     return hours * 60 + minutes || 0;
   }
   return 0;

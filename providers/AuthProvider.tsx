@@ -19,8 +19,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // This provider will be used across the app pages
 export const AuthProvider = ({ children }: { children: any }) => {
+  // Get user and auth methods from the user store
   const { user, getUser, setUser, logout } = useUserStore();
+
+  // Get auth methods from the auth store
   const { clearToken, getToken } = _useAuth();
+
+  // State to manage user session
   const [hasSession, setHasSession] = useState(false)
 
   useEffect(() => {
@@ -71,7 +76,12 @@ export const AuthProvider = ({ children }: { children: any }) => {
     try {
       await GoogleSignin.hasPlayServices();
       const signInResult = await GoogleSignin.signIn();
+
+      // Get the ID token from the sign-in result
+      // This is the new style of google-sign in result, from v13+ of that module
       idToken = signInResult.data?.idToken;
+
+      // If the ID token is available, sign in with Firebase
       if (idToken) {
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         await auth().signInWithCredential(googleCredential);
@@ -124,6 +134,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
   );
 };
 
+// Custom hook to use the AuthContext
 export const useAuthProvider = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');

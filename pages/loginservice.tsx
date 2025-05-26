@@ -39,11 +39,9 @@ const LoginService =()=> {
   }, [setUser])
 
   const handleEmailLogin = async () => {
-    console.log('handleEmailLogin')
     setIsSigninInProgress(true);
     try {
       const response = await loginWithEmail(email, password);
-      console.log('response', response)
       if (response) {
         setUser(response)
         saveToken(response.token );
@@ -55,6 +53,7 @@ const LoginService =()=> {
       } else {
         console.log('Login Failed', 'Invalid credentials');
       }
+      setError(error instanceof Error ? error.message : 'Login failed. Invalid credentials.');
       setIsSigninInProgress(false);
     } finally {
       setIsSigninInProgress(false);
@@ -74,9 +73,8 @@ const LoginService =()=> {
       const signInResult = await GoogleSignin.signIn();
 
       // Try the new style of google-sign in result, from v13+ of that module
-
       idToken = signInResult.data?.idToken;
-      console.log('idToken======>', idToken)
+
       if (idToken) {
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         await auth().signInWithCredential(googleCredential);
@@ -112,6 +110,7 @@ const LoginService =()=> {
         <Text className='text-2xl font-bold text-center mb-8'>Welcome to PerDiem</Text>
         <Text className='text-2xl font-bold text-center mb-8'>Login</Text>
         
+        {/* Error message */}
         {error && (
           <View className="absolute top-10 left-0 right-0 items-center z-50">
             <Text className="text-white bg-red-500 px-4 py-2 rounded-md">
@@ -120,6 +119,7 @@ const LoginService =()=> {
           </View>
         )}
         
+        {/* Input form */}
         <TextInput
           className='border p-3 rounded mb-4'
           placeholder="Email"
@@ -150,16 +150,19 @@ const LoginService =()=> {
         <View className='justify-center items-center mt-2'>
           <Text> - OR - </Text>
         </View>
+
+        {/* Google Sign-In Button */}
         <View className='justify-center items-center mt-4'>
           <GoogleSigninButton
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
             onPress={handleGoogleSignIn}
             disabled={isSigninInProgress}
-          testID="test-google-login-button"
+            testID="test-google-login-button"
           />
         </View>
 
+        {/* Link to Sign Up page */}
         <View className="justify-center items-center mt-16">
           <Link 
             href={"/signup"} 

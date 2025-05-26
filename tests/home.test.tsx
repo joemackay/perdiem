@@ -1,13 +1,9 @@
-import { useSchedulesStore } from '@/store/schedules-store';
-import { useUserStore } from '@/store/user-store';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import React from 'react';
 import HomeService from '../pages/homeservice';
 
 // Mock the Zustand stores
-jest.mock('@/store/auth-store');
-jest.mock('@/store/schedules-store');
 
 // Mock expo-router
 jest.mock('expo-router', () => ({
@@ -43,34 +39,7 @@ describe('HomeService', () => {
   const mockLogout = jest.fn();
   const mockSetSelectedDayOfTheMonth = jest.fn();
   const mockSetSelectedTime = jest.fn();
-
-  beforeEach(() => {
-    // Reset all mocks before each test
-    jest.clearAllMocks();
-
-    // Mock the auth store
-    (useUserStore as unknown as jest.Mock).mockImplementation((selector) => {
-      if (selector === jest.fn()) {
-        return mockUserInfo;
-      }
-      return {
-        logout: mockLogout,
-      };
-    });
-
-    // Mock the schedules store
-    (useSchedulesStore as unknown as jest.Mock).mockImplementation((selector) => {
-      if (selector === jest.fn()) {
-        return {
-          timezone: 'America/New_York',
-          selectedTime: '',
-          setSelectedDayOfTheMonth: mockSetSelectedDayOfTheMonth,
-          setSelectedTime: mockSetSelectedTime,
-        };
-      }
-      return {};
-    });
-  });
+  const mockGetUser = jest.fn(() => mockUserInfo);
 
   it('renders correctly with user information', () => {
     const { getByText, getByTestId } = render(<HomeService />);

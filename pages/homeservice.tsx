@@ -19,14 +19,14 @@ import { generateMonthlySequence, generateTimeSchedules, getDateOrdinal } from '
 const HomeService =()=> {
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showTimeSlotPicker, setShowTimeSlotPicker] = useState(false)
-  const userInfo = useUserStore((state)=> state.user)
-  const { timezone, selectedDayOfTheMonth, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
   const [myTimeZone, setMyTimeZone] = useState('')
   const [chosenDate, setChosenDate] = useState(0)
   const [chosenTime, setChosenTime] = useState('--')
   const [currentGreeting, setCurrentGreeting] = useState('None')
   const [dateOrdinal, setDateOrdinal] = useState('')
   const { signOut } = useAuthProvider()
+  const userInfo = useUserStore((state)=> state.user)
+  const { timezone, selectedDayOfTheMonth, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
 
   const myDate = new Date();
   const currentMinute = myDate.getMinutes();
@@ -35,7 +35,7 @@ const HomeService =()=> {
   const currentDate = myDate.getDate();
   const currentMonth = myDate.getMonth();
   const daysArray = generateMonthlySequence(currentDay)
-  const timeSlotIntervals = useMemo(() => generateTimeSchedules(Math.max(8, currentHour), currentMinute, (17-currentHour), 30), [currentMinute, currentMinute]) ;
+  const timeSlotIntervals = useMemo(() => generateTimeSchedules(Math.max(8, currentHour), currentMinute, (18-currentHour), 30), [currentMinute, currentHour]) ;
 
   // Process greetings based on time of the day. Time of the day is based on the timezone selected by the user
   const myTimezone = Localization.timezone;
@@ -147,25 +147,18 @@ const HomeService =()=> {
   // Automatically reschedule push notification
   useEffect(() => {
     if (selectedTime) {
-      // if saved time is "9:00 - 9:15" we split it to get the 9:15
-      scheduleNotification(selectedTime.split(' - ')[1]);
+      // if saved time is "9:00 - 9:30" we split it to get the 9:00
+      scheduleNotification(selectedTime.split(' - ')[0]);
     }
   }, [selectedTime])
 
-  const scheduleNotification = (selectedTime: string) => {
+  const scheduleNotification = (selectedTime: string) => { //9:00
     try {
       // 1. Convert selectedTime string to a Date object
-      const [time, period] = selectedTime.split(' ');
-      let [hours, minutes] = time.split(':').map(Number);
-
-      if (period === 'PM' && hours !== 12) {
-          hours += 12;
-      } else if (period === 'AM' && hours === 12) {
-          hours = 0;
-      }
+      let [hours, minutes] = selectedTime.split(':').map(Number);
 
       const fireDate = new Date();
-      fireDate.setHours(hours);
+      fireDate.setHours(hours-1); // Send notification 1 hour before the selected time
       fireDate.setMinutes(minutes);
       fireDate.setSeconds(0); // Ensure seconds are 0 for accuracy
 
@@ -180,7 +173,7 @@ const HomeService =()=> {
       PushNotification.scheduleLocalNotification({
           channelId: "scheduled-time-channel", // Make sure this channel ID matches the one you created
           title: "Time Reminder",
-          message: `Your scheduled time is ${selectedTime}!`,
+          message: `Your scheduled time is 1hr before ${selectedTime}!`,
           date: fireDate, // Use the Date object
           allowWhileIdle: true, // Optional: Allow notification when the app is in background
           repeatType: 'day',
@@ -226,11 +219,16 @@ const HomeService =()=> {
       {/* <SafeAreaView> */}
       <ScrollView className="flex-1 bg-gray-100">
         <View className="p-2 h-full">
+          {/* Header section */}
           <View className="flex-row justify-between mt-2 mb-4 bg-white shadow-sm p-2">
+
+            {/* Display name and greeting */}
             <View>
               <Text className="text-2xl text-bold text-black">{userInfo?.fname}</Text>
               <Text className="text-sm text-gray-500">{currentGreeting}</Text>
             </View>
+
+            {/* Logout button */}
             <View>
               <Button
                 onPress={()=>handleLogout()}
@@ -238,16 +236,22 @@ const HomeService =()=> {
             </View>
             {/* <View className="ml-2"><Text>{userInfo?.picture}</Text></View>  */}
           </View>
+
+          {/* Timezone section */}
           <View className="flex-col mb-4 bg-white  shadow-sm p-2">
             <Text className="text-md mb-6">What is your preferred timezone?</Text>
             <TimezoneToggle locale={myTimeZone} />
           </View>
           
+          {/* Notification section */}
           <View className="flex-col mb-4 bg-white  shadow-sm p-2">
             <Button className="bg-blue-500 w-48" onPress={handleSendNotification}>Send notification</Button>
           </View>
           
+          {/* Date and time selection section */}
           <View className="flex-col mb-4 bg-white  shadow-sm p-2">
+
+            {/* Date picker button and selected date/time */}
             <View className="flex-row justify-between">
               {!showDatePicker && !showTimeSlotPicker && 
                 <Button onPress={showDatepicker}
@@ -262,6 +266,8 @@ const HomeService =()=> {
                 
               </Text>
             </View>
+
+            {/* Date picker widget */}
             <View className="mt-4 bg-white">
               {showDatePicker ? (
                 <CustomDatePicker
@@ -274,6 +280,8 @@ const HomeService =()=> {
                 />
                 )
               : null}
+
+              {/* Time picker widget */}
               {showTimeSlotPicker ? (
                 // Display available slots until 6pm
                 <TimeSlots

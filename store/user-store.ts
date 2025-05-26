@@ -35,7 +35,7 @@ export const useUserStore = create<UserState>()(
       },
     }),
     { 
-      name: 'auth-storage',
+      name: 'user-storage',
       storage: createJSONStorage(() => AsyncStorage), // Explicitly use AsyncStorage
     }
   )
