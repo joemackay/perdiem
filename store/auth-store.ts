@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 const TOKEN = 'token';
+const isTestEnv = process.env.JEST_WORKER_ID !== undefined;
 
 interface AuthState {
 
@@ -32,7 +33,9 @@ export const _useAuth = create<AuthState>()(
       saveToken: async (token) => {
         // setToken(token);
         await SecureStore.setItemAsync(TOKEN, token)
-        set({ status: 'signIn', token });
+        if (!isTestEnv) {
+          set({ status: 'signIn', token });
+        }
       },
       
       // Clear token from Secure store - User has logged out

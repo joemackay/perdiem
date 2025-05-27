@@ -18,7 +18,7 @@ const CustomDatePicker: React.FC<datePickerType> = ({ daysArray, currentDate, mo
   ];
   return (
     <>
-      <View className=' bg-gray-100 py-2' testID="test-dates-container">
+      <View className=' bg-gray-100 py-2' testID="test-custom-date-picker">
         <View className="flex-row justify-between px-2">
           <Text className='text-center mt-2'>Select Date</Text>
           <Button onPress={onCancelled} className="bg-slate-500 w-15 h-10 text-center items-center" testID="test-date-picker-close-button"> X</Button>

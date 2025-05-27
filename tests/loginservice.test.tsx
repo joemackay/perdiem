@@ -16,6 +16,13 @@ jest.mock('expo-router', () => ({
   },
   Link: ({ href, children }: any) => <>{children}</>,
 }));
+// jest.mock('@react-native-google-signin/google-signin', () => {
+//   const actual = jest.requireActual('@react-native-google-signin/google-signin');
+//   return {
+//     ...actual,
+//     GoogleSigninButton: () => null, // render nothing for button
+//   };
+// });
 jest.mock('@react-native-google-signin/google-signin', () => ({
   GoogleSignin: {
     configure: jest.fn(),
@@ -50,8 +57,8 @@ describe('LoginService', () => {
   it('logs in with email and navigates on success', async () => {
     const mockResponse = {
       user_uuid: '123',
-      fname: 'John',
-      lname: 'Doe',
+      fname: 'Joe',
+      lname: 'Smith',
       picture: '',
       email: 'user@tryperdiem.com',
       token: 'abc123',

@@ -24,7 +24,8 @@ const HomeService =()=> {
   const [chosenTime, setChosenTime] = useState('--')
   const [currentGreeting, setCurrentGreeting] = useState('None')
   const [dateOrdinal, setDateOrdinal] = useState('')
-  const { signOut } = useAuthProvider()
+    const auth = useAuthProvider();
+  const signOut = auth?.signOut;
   const userInfo = useUserStore((state)=> state.user)
   const { timezone, selectedDayOfTheMonth, selectedTime, setSelectedDayOfTheMonth, setSelectedTime } = useSchedulesStore();
 
@@ -80,7 +81,9 @@ const HomeService =()=> {
   // User clicked on logout
   const handleLogout = async () => {
     // Clear user info from local storage(AuthProvider)
-    signOut()
+    if (signOut) {
+      signOut();
+    }
 
     // Go to login page
     router.replace('/login')
@@ -212,8 +215,7 @@ const HomeService =()=> {
   const mSelectedDate = selectedDayOfTheMonth || chosenDate
 
   // Display either of selected time or store time
-  const mSelectedTime = selectedTime || chosenTime
-
+  const mSelectedTime = selectedTime || chosenTime  
   return (
     <>
       {/* <SafeAreaView> */}
@@ -225,7 +227,7 @@ const HomeService =()=> {
             {/* Display name and greeting */}
             <View>
               <Text className="text-2xl text-bold text-black">{userInfo?.fname}</Text>
-              <Text className="text-sm text-gray-500">{currentGreeting}</Text>
+              <Text className="text-sm text-gray-500" testID="test-display-greeting">{currentGreeting}</Text>
             </View>
 
             {/* Logout button */}
@@ -254,9 +256,12 @@ const HomeService =()=> {
             {/* Date picker button and selected date/time */}
             <View className="flex-row justify-between">
               {!showDatePicker && !showTimeSlotPicker && 
-                <Button onPress={showDatepicker}
+                <Button onPress={() => setShowDatePicker(true)}
                   className="bg-blue-500"
-                  testID="test-select-date-button">Select Date</Button>}
+                  testID="test-select-date-button">
+                    Select Date
+                </Button>
+              }
               <Text className="pt-3">
                 {mSelectedDate > 0 ? (
                   <>

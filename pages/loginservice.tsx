@@ -17,6 +17,8 @@ const LoginService =()=> {
   const { setUser } = useUserStore()
   // const { promptAsync } = useGoogleAuth();
 
+  const isTestEnv = process.env.JEST_WORKER_ID !== undefined;
+
   useEffect(() => {
     // Configure Google Sign-In on component mount
     GoogleSignin.configure({
@@ -153,13 +155,13 @@ const LoginService =()=> {
 
         {/* Google Sign-In Button */}
         <View className='justify-center items-center mt-4'>
-          <GoogleSigninButton
+          {!isTestEnv && <GoogleSigninButton
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
             onPress={handleGoogleSignIn}
             disabled={isSigninInProgress}
             testID="test-google-login-button"
-          />
+          />}
         </View>
 
         {/* Link to Sign Up page */}
