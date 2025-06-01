@@ -1,21 +1,39 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useForm } from 'react-hook-form';
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import z from 'zod';
 import { loginWithEmail } from "../api/auth";
 import { _useAuth } from '../store/auth-store';
 import { useUserStore } from "../store/user-store";
 
+const loginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Min 6 char')
+})
+
+type FormData = z.infer<typeof loginSchema>;
+
 // The business logic of the login page
 const LoginService =()=> {
   const { saveToken } = _useAuth();
-  const [email, setEmail] = useState('user@tryperdiem.com');
-  const [password, setPassword] = useState('password');
+  // const [email, setEmail] = useState('user@tryperdiem.com');
+  // const [password, setPassword] = useState('password');
   const [error, setError] = useState<string | null>(null);
   const [isSigninInProgress, setIsSigninInProgress] = useState(false);
   const { setUser } = useUserStore()
   // const { promptAsync } = useGoogleAuth();
+
+  const { watch, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: 'user@tryperdiem.com',
+      password: 'password'
+    }
+  })
 
   const isTestEnv = process.env.JEST_WORKER_ID !== undefined;
 
@@ -40,10 +58,10 @@ const LoginService =()=> {
     return unsubscribe; // Unsubscribe from the listener when the component unmounts
   }, [setUser])
 
-  const handleEmailLogin = async () => {
+  const handleEmailLogin = async (data: FormData) => {
     setIsSigninInProgress(true);
     try {
-      const response = await loginWithEmail(email, password);
+      const response = await loginWithEmail(data.email, data.password);
       if (response) {
         setUser(response)
         saveToken(response.token );
@@ -122,28 +140,38 @@ const LoginService =()=> {
         )}
         
         {/* Input form */}
-        <TextInput
-          className='border p-3 rounded mb-4'
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          testID="test-email"
-        />
+        <View className='mb-4'>
+          <TextInput
+            className='border p-3 rounded border border-slate-400'
+            placeholder="Email"
+            value={watch('email')}
+            // onChangeText={setEmail}
+            onChangeText={(text) => setValue('email', text)}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            testID="test-email"
+          />
+          {errors.email && <Text className="text-red-500">{errors.email.message}</Text>}
+        </View>
         
-        <TextInput
-          className='border p-3 rounded mb-6'
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          testID="test-password"
-        />
+        <View className='mb-4'>
+          <TextInput
+            className='border p-3 rounded border border-slate-400'
+            placeholder="Password"
+            // value={password}
+            value={watch('password')}
+            // onChangeText={setPassword}
+            onChangeText={(text) => setValue('password', text)}
+            secureTextEntry
+            testID="test-password"
+          />
+          {errors.password && <Text className="text-red-500">{errors.password.message}</Text>}
+        </View>
         
         <TouchableOpacity
           className='bg-slate-600 rounded-xl py-4 mb-4'
-          onPress={()=>handleEmailLogin()}
+          // onPress={()=>handleEmailLogin()}
+          onPress={handleSubmit(handleEmailLogin)}
           testID="test-login-touch-opacity"
         >
           <Text className='text-white text-center'>{isSigninInProgress ? 'Logging in...' : 'Login with Email'}</Text>

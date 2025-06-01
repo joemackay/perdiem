@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-import { fetchStoreScheduleOverrides, fetchStoreSchedules } from "../api/schedules";
+import { useFetchStoreScheduleOverrides, useFetchStoreSchedules } from "../api/schedules";
 import { useSchedulesStore } from "../store/schedules-store";
 import { Button } from "../ui/button";
 import { getDateOrdinal, timeToMinutes } from "../utils/formatter";
@@ -14,9 +14,9 @@ const DetailsService =() => {
   // const [isLoading, setIsLoading] = useState(false)
   // const [error, setError] = useState<Error | null>(null)
   
-  const { data: schedules, isLoading, error, refetch } = fetchStoreSchedules();
+  const { data: schedules, isLoading, error, refetch } = useFetchStoreSchedules();
 
-  const { data: scheduleOverrides } = fetchStoreScheduleOverrides();
+  const { data: scheduleOverrides } = useFetchStoreScheduleOverrides();
   useEffect(() => {
     // Send schedules to store
     setSchedules(schedules ?? []);

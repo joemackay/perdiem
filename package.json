@@ -15,6 +15,7 @@
     "@dev-plugins/react-query": "^0.3.1",
     "@expo/vector-icons": "^14.1.0",
     "@gorhom/bottom-sheet": "^5",
+    "@hookform/resolvers": "^5.0.1",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-community/datetimepicker": "^8.3.0",
@@ -53,6 +54,7 @@
     "nativewind": "^4.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.56.4",
     "react-native": "0.79.2",
     "react-native-dotenv": "^3.4.11",
     "react-native-flash-message": "^0.4.2",
@@ -69,6 +71,7 @@
     "react-query-kit": "^3.3.1",
     "tailwind-variants": "^1.0.0",
     "tailwindcss": "^3.4.17",
+    "zod": "^3.25.46",
     "zustand": "^5.0.4"
   },
   "devDependencies": {

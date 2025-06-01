@@ -16,7 +16,7 @@ const queryOptions = {
 /**
  * User React Query to fetch store schedules
  */
-export const fetchStoreSchedules = createQuery<StoreScheduleType[]>({
+export const useFetchStoreSchedules = createQuery<StoreScheduleType[]>({
   queryKey: ['schedules'],
   fetcher: () =>  axios.get(`${BASE_URL}/store-times/`, { 
       headers: { 
@@ -29,7 +29,7 @@ export const fetchStoreSchedules = createQuery<StoreScheduleType[]>({
 /**
  * User React Query to fetch store overrides
  */
-export const fetchStoreScheduleOverrides = createQuery<StoreScheduleType[]>({
+export const useFetchStoreScheduleOverrides = createQuery<StoreScheduleType[]>({
   queryKey: ['schedules'],
   fetcher: () =>  axios.get(`${BASE_URL}/store-overrides/`, { 
       headers: { 
