@@ -136,7 +136,15 @@ export const AuthProvider = ({ children }: { children: any }) => {
       // await GoogleSignin.revokeAccess();
       
       // Clear Google Account
-      await auth().signOut();
+      const user = auth().currentUser;
+      if (user) {
+        // User is signed in, proceed with sign out
+        await auth().signOut();
+        console.log('User signed out successfully');
+      } else {
+        // No user is signed in
+        console.log('No user to sign out');
+      }
 
       // Clear context session
       setHasSession(false)
