@@ -54,9 +54,6 @@ const HomeService =()=> {
     greeting = `Night Owl in ${myCity}!`;
   }
 
-  // Display the date picker
-  const showDatepicker = () => setShowDatePicker(true);
-
   // Handle date selection
   const onSelectDate = (dayOfTheMonth: number) => {
     setSelectedDayOfTheMonth(dayOfTheMonth)

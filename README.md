@@ -82,6 +82,17 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo-doctor
    ```
 
+5. Bundle the app for distribution/publishing
+   For iOS
+   ```bash
+   eas build --platform ios
+   ```
+
+   For Android
+   ```bash
+   eas build --platform android --profile development
+   ```
+
 ## Errors
 1. If you run into this error "CommandError: No development build (com.xxx.xxx) for this project is installed. Please make and install a development build on the device first."
    It means the build is missing in the simulator or device. Therefore run this command

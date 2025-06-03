@@ -9,12 +9,21 @@ jest.mock('@react-native-firebase/auth', () => {
   });
 });
 // Mock necessary modules
-jest.mock('@/api/auth');
+// jest.mock('@/api/auth');
+jest.mock('../api/auth', () => ({
+  loginWithEmail: jest.fn(),
+}));
 jest.mock('expo-router', () => ({
   router: {
     navigate: jest.fn(),
   },
   Link: ({ href, children }: any) => <>{children}</>,
+}));
+jest.mock('../store/auth-store', () => ({
+  _useAuth: () => ({ saveToken: jest.fn() }),
+}));
+jest.mock('../store/user-store', () => ({
+  useUserStore: () => ({ setUser: jest.fn() }),
 }));
 // jest.mock('@react-native-google-signin/google-signin', () => {
 //   const actual = jest.requireActual('@react-native-google-signin/google-signin');
