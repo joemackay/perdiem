@@ -51,6 +51,7 @@ const DetailsService =() => {
       schedule.is_open;
     })
     setStoreAvailability(isAvailable)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scheduleOverrides, schedules, selectedDayOfTheMonth, selectedTime]);
 
   // Display loading icons - Useful for slow networks

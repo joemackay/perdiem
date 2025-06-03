@@ -5,6 +5,7 @@ import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+// eslint-disable-next-line import/no-named-as-default
 import z from 'zod';
 import { loginWithEmail } from "../api/auth";
 import { _useAuth } from '../store/auth-store';
@@ -142,7 +143,7 @@ const LoginService =()=> {
         {/* Input form */}
         <View className='mb-4'>
           <TextInput
-            className='border p-3 rounded border border-slate-400'
+            className='p-3 rounded border border-slate-400'
             placeholder="Email"
             value={watch('email')}
             // onChangeText={setEmail}
@@ -156,7 +157,7 @@ const LoginService =()=> {
         
         <View className='mb-4'>
           <TextInput
-            className='border p-3 rounded border border-slate-400'
+            className='p-3 rounded border border-slate-400'
             placeholder="Password"
             // value={password}
             value={watch('password')}

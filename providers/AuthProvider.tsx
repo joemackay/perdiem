@@ -74,6 +74,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
     // unsusbscribe from listener
     return unsubscribe;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUser, setUser]);
 
   // Sign in user with Google Auth
