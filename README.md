@@ -81,6 +81,15 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npx expo-doctor
    ```
+
+## Errors
+1. If you run into this error "CommandError: No development build (com.xxx.xxx) for this project is installed. Please make and install a development build on the device first."
+   It means the build is missing in the simulator or device. Therefore run this command
+   ```bash
+   npx expo run:ios
+   ```
+
+   It builds a custom development client and installs it into the simulator or the device
  
 ## Limitations
 1. The unit tests pass except for Google Authentication, and AsyncStorage
